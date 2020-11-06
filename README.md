@@ -12,9 +12,7 @@ Considerando a natureza categórica da variável resposta, o problema será, em 
 No que se refere ao tipo de aprendizagem, o conjunto das possíveis técnicas a serem utilizadas direciona o problema para que seja do tipo supervisionado. Dentre as muitas possibilidades, pode-se citar a própria regressão logística e a máquina de suporte vetorial support vector machine. Mas, como se tem disponível uma variável resposta, será também possível utilizar técnicas tipicamente não-supervisionadas (tais como a análise de agrupamentos ou clusters) com apoio de uma validação cruzada.
 
 
-##############################################################################################
-
-Endereço da Página do Problema
+### Endereço da Página do Problema
 
 O conjunto dos dados, bem como outras informações, podem ser obtidos em:
 
