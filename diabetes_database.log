@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex 2020.11.5)  6 NOV 2020 13:10
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex 2020.11.5)  6 NOV 2020 14:23
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -941,289 +941,289 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 {c:/Users/Rodrigo Araujo/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/upd
 map/pdftex.map}]
 
-Package xcolor Warning: Incompatible color definition on input line 184.
+Package xcolor Warning: Incompatible color definition on input line 185.
 
 LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 1
-85.
+86.
 
 (c:/Users/Rodrigo Araujo/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/t1lmtt
 .fd
 File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <10> not available
-(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 186.
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 187.
 
-Package xcolor Warning: Incompatible color definition on input line 189.
-
-
-Package xcolor Warning: Incompatible color definition on input line 189.
+Package xcolor Warning: Incompatible color definition on input line 190.
 
 
-Overfull \hbox (68.73099pt too wide) in paragraph at lines 195--208
+Package xcolor Warning: Incompatible color definition on input line 190.
+
+
+Overfull \hbox (68.73099pt too wide) in paragraph at lines 196--209
  [][] 
  []
 
 
-Package xcolor Warning: Incompatible color definition on input line 210.
+Package xcolor Warning: Incompatible color definition on input line 211.
 
 
-Package xcolor Warning: Incompatible color definition on input line 214.
+Package xcolor Warning: Incompatible color definition on input line 215.
 
 
-Package xcolor Warning: Incompatible color definition on input line 214.
+Package xcolor Warning: Incompatible color definition on input line 215.
 
 
-Package xcolor Warning: Incompatible color definition on input line 244.
+Package xcolor Warning: Incompatible color definition on input line 245.
 
 [2pdfTeX warning (ext4): destination with the same identifier (name{table.1}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.244 \begin{Shaded}
+l.245 \begin{Shaded}
                     ]
 
-Package xcolor Warning: Incompatible color definition on input line 248.
+Package xcolor Warning: Incompatible color definition on input line 249.
 
 
-Package xcolor Warning: Incompatible color definition on input line 248.
+Package xcolor Warning: Incompatible color definition on input line 249.
 
 
-Package xcolor Warning: Incompatible color definition on input line 254.
+Package xcolor Warning: Incompatible color definition on input line 255.
 
 
-Package xcolor Warning: Incompatible color definition on input line 260.
+Package xcolor Warning: Incompatible color definition on input line 261.
 
 
-Package xcolor Warning: Incompatible color definition on input line 260.
+Package xcolor Warning: Incompatible color definition on input line 261.
 
 
-Package xcolor Warning: Incompatible color definition on input line 266.
+Package xcolor Warning: Incompatible color definition on input line 267.
 
 
-Package xcolor Warning: Incompatible color definition on input line 270.
+Package xcolor Warning: Incompatible color definition on input line 271.
 
 
-Package xcolor Warning: Incompatible color definition on input line 270.
+Package xcolor Warning: Incompatible color definition on input line 271.
 
 
-Package xcolor Warning: Incompatible color definition on input line 287.
+Package xcolor Warning: Incompatible color definition on input line 288.
 
 
-Package xcolor Warning: Incompatible color definition on input line 291.
+Package xcolor Warning: Incompatible color definition on input line 292.
 
 
-Package xcolor Warning: Incompatible color definition on input line 291.
+Package xcolor Warning: Incompatible color definition on input line 292.
 
 
-Package xcolor Warning: Incompatible color definition on input line 302.
+Package xcolor Warning: Incompatible color definition on input line 303.
 
 [3]
 
-Package xcolor Warning: Incompatible color definition on input line 306.
+Package xcolor Warning: Incompatible color definition on input line 307.
 
 
-Package xcolor Warning: Incompatible color definition on input line 306.
+Package xcolor Warning: Incompatible color definition on input line 307.
 
 
-Package xcolor Warning: Incompatible color definition on input line 357.
+Package xcolor Warning: Incompatible color definition on input line 358.
 
 
-Package xcolor Warning: Incompatible color definition on input line 361.
+Package xcolor Warning: Incompatible color definition on input line 362.
 
 
-Package xcolor Warning: Incompatible color definition on input line 361.
+Package xcolor Warning: Incompatible color definition on input line 362.
 
-<diabetes_database_files/figure-latex/unnamed-chunk-6-1.pdf, id=74, 469.755pt x
+<diabetes_database_files/figure-latex/unnamed-chunk-6-1.pdf, id=89, 469.755pt x
  325.215pt>
 File: diabetes_database_files/figure-latex/unnamed-chunk-6-1.pdf Graphic file (
 type pdf)
 <use diabetes_database_files/figure-latex/unnamed-chunk-6-1.pdf>
 Package pdftex.def Info: diabetes_database_files/figure-latex/unnamed-chunk-6-1
-.pdf  used on input line 363.
+.pdf  used on input line 364.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
-Overfull \hbox (39.99884pt too wide) in paragraph at lines 363--364
+Overfull \hbox (39.99884pt too wide) in paragraph at lines 364--365
 [][] 
  []
 
 
-Package xcolor Warning: Incompatible color definition on input line 365.
+Package xcolor Warning: Incompatible color definition on input line 366.
 
 [4]
 
-Package xcolor Warning: Incompatible color definition on input line 369.
+Package xcolor Warning: Incompatible color definition on input line 370.
 
 
-Package xcolor Warning: Incompatible color definition on input line 369.
+Package xcolor Warning: Incompatible color definition on input line 370.
 
 
-Package xcolor Warning: Incompatible color definition on input line 377.
+Package xcolor Warning: Incompatible color definition on input line 378.
 
 
-Package xcolor Warning: Incompatible color definition on input line 387.
+Package xcolor Warning: Incompatible color definition on input line 388.
 
 
-Package xcolor Warning: Incompatible color definition on input line 387.
+Package xcolor Warning: Incompatible color definition on input line 388.
 
-<diabetes_database_files/figure-latex/unnamed-chunk-7-1.pdf, id=79, 469.755pt x
+<diabetes_database_files/figure-latex/unnamed-chunk-7-1.pdf, id=94, 469.755pt x
  325.215pt>
 File: diabetes_database_files/figure-latex/unnamed-chunk-7-1.pdf Graphic file (
 type pdf)
 <use diabetes_database_files/figure-latex/unnamed-chunk-7-1.pdf>
 Package pdftex.def Info: diabetes_database_files/figure-latex/unnamed-chunk-7-1
-.pdf  used on input line 389.
+.pdf  used on input line 390.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
-Overfull \hbox (39.99884pt too wide) in paragraph at lines 389--390
+Overfull \hbox (39.99884pt too wide) in paragraph at lines 390--391
 [][] 
  []
-
-
-Package xcolor Warning: Incompatible color definition on input line 391.
 
 [5 <./diabetes_database_files/figure-latex/unnamed-chunk-6-1.pdf>]
 
 Package xcolor Warning: Incompatible color definition on input line 396.
 
 
-Package xcolor Warning: Incompatible color definition on input line 396.
+Package xcolor Warning: Incompatible color definition on input line 401.
 
 
-Package xcolor Warning: Incompatible color definition on input line 409.
+Package xcolor Warning: Incompatible color definition on input line 401.
 
 
-Package xcolor Warning: Incompatible color definition on input line 428.
+Package xcolor Warning: Incompatible color definition on input line 414.
 
 
-Package xcolor Warning: Incompatible color definition on input line 428.
+Package xcolor Warning: Incompatible color definition on input line 433.
 
 
-Package xcolor Warning: Incompatible color definition on input line 428.
+Package xcolor Warning: Incompatible color definition on input line 433.
+
+
+Package xcolor Warning: Incompatible color definition on input line 433.
 
 [6 <./diabetes_database_files/figure-latex/unnamed-chunk-7-1.pdf>]
 
-Package xcolor Warning: Incompatible color definition on input line 428.
+Package xcolor Warning: Incompatible color definition on input line 433.
 
 
-Package xcolor Warning: Incompatible color definition on input line 428.
+Package xcolor Warning: Incompatible color definition on input line 433.
 
 
-Package xcolor Warning: Incompatible color definition on input line 435.
+Package xcolor Warning: Incompatible color definition on input line 440.
 
 
-Package xcolor Warning: Incompatible color definition on input line 439.
+Package xcolor Warning: Incompatible color definition on input line 444.
 
 
-Package xcolor Warning: Incompatible color definition on input line 439.
+Package xcolor Warning: Incompatible color definition on input line 444.
 
 
-Package xcolor Warning: Incompatible color definition on input line 449.
+Package xcolor Warning: Incompatible color definition on input line 454.
 
 
-Package xcolor Warning: Incompatible color definition on input line 453.
+Package xcolor Warning: Incompatible color definition on input line 458.
 
 
-Package xcolor Warning: Incompatible color definition on input line 453.
+Package xcolor Warning: Incompatible color definition on input line 458.
 
 
-Package xcolor Warning: Incompatible color definition on input line 463.
+Package xcolor Warning: Incompatible color definition on input line 468.
 
 
-Package xcolor Warning: Incompatible color definition on input line 467.
+Package xcolor Warning: Incompatible color definition on input line 472.
 
 
-Package xcolor Warning: Incompatible color definition on input line 467.
-
-
-Package xcolor Warning: Incompatible color definition on input line 496.
+Package xcolor Warning: Incompatible color definition on input line 472.
 
 [7]
 
-Package xcolor Warning: Incompatible color definition on input line 500.
+Package xcolor Warning: Incompatible color definition on input line 501.
 
 
-Package xcolor Warning: Incompatible color definition on input line 500.
+Package xcolor Warning: Incompatible color definition on input line 505.
 
 
-Package xcolor Warning: Incompatible color definition on input line 537.
+Package xcolor Warning: Incompatible color definition on input line 505.
 
 
-Package xcolor Warning: Incompatible color definition on input line 547.
+Package xcolor Warning: Incompatible color definition on input line 542.
 
 
-Package xcolor Warning: Incompatible color definition on input line 547.
+Package xcolor Warning: Incompatible color definition on input line 552.
+
+
+Package xcolor Warning: Incompatible color definition on input line 552.
 
 [8]
 
-Package xcolor Warning: Incompatible color definition on input line 579.
+Package xcolor Warning: Incompatible color definition on input line 584.
 
 
-Package xcolor Warning: Incompatible color definition on input line 583.
+Package xcolor Warning: Incompatible color definition on input line 588.
 
 
-Package xcolor Warning: Incompatible color definition on input line 583.
+Package xcolor Warning: Incompatible color definition on input line 588.
 
-<diabetes_database_files/figure-latex/unnamed-chunk-12-1.pdf, id=112, 469.755pt
+<diabetes_database_files/figure-latex/unnamed-chunk-12-1.pdf, id=126, 469.755pt
  x 325.215pt>
 File: diabetes_database_files/figure-latex/unnamed-chunk-12-1.pdf Graphic file 
 (type pdf)
 <use diabetes_database_files/figure-latex/unnamed-chunk-12-1.pdf>
 Package pdftex.def Info: diabetes_database_files/figure-latex/unnamed-chunk-12-
-1.pdf  used on input line 585.
+1.pdf  used on input line 590.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
-Overfull \hbox (39.99884pt too wide) in paragraph at lines 585--586
+Overfull \hbox (39.99884pt too wide) in paragraph at lines 590--591
 [][] 
  []
 
 
-Package xcolor Warning: Incompatible color definition on input line 589.
+Package xcolor Warning: Incompatible color definition on input line 594.
+
+[9 <./diabetes_database_files/figure-latex/unnamed-chunk-12-1.pdf>]
+
+Package xcolor Warning: Incompatible color definition on input line 598.
 
 
-Package xcolor Warning: Incompatible color definition on input line 593.
+Package xcolor Warning: Incompatible color definition on input line 598.
 
 
-Package xcolor Warning: Incompatible color definition on input line 593.
-
-
-Overfull \hbox (223.24297pt too wide) in paragraph at lines 597--597
+Overfull \hbox (223.24297pt too wide) in paragraph at lines 602--602
 []\T1/lmtt/m/n/10 ## Warning in RColorBrewer::brewer.pal(nlevs, "Set1"): minima
 l value for n is 3, returning requested palette with 3 different levels[] 
  []
 
-<diabetes_database_files/figure-latex/unnamed-chunk-13-1.pdf, id=113, 469.755pt
+<diabetes_database_files/figure-latex/unnamed-chunk-13-1.pdf, id=138, 469.755pt
  x 325.215pt>
 File: diabetes_database_files/figure-latex/unnamed-chunk-13-1.pdf Graphic file 
 (type pdf)
 <use diabetes_database_files/figure-latex/unnamed-chunk-13-1.pdf>
 Package pdftex.def Info: diabetes_database_files/figure-latex/unnamed-chunk-13-
-1.pdf  used on input line 599.
+1.pdf  used on input line 604.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
-Overfull \hbox (39.99884pt too wide) in paragraph at lines 599--600
+Overfull \hbox (39.99884pt too wide) in paragraph at lines 604--605
 [][] 
  []
 
-[9 <./diabetes_database_files/figure-latex/unnamed-chunk-12-1.pdf>]
 
-Package xcolor Warning: Incompatible color definition on input line 603.
-
-
-Package xcolor Warning: Incompatible color definition on input line 607.
+Package xcolor Warning: Incompatible color definition on input line 608.
 
 
-Package xcolor Warning: Incompatible color definition on input line 607.
+Package xcolor Warning: Incompatible color definition on input line 612.
 
-<diabetes_database_files/figure-latex/unnamed-chunk-14-1.pdf, id=125, 469.755pt
+
+Package xcolor Warning: Incompatible color definition on input line 612.
+
+<diabetes_database_files/figure-latex/unnamed-chunk-14-1.pdf, id=139, 469.755pt
  x 325.215pt>
 File: diabetes_database_files/figure-latex/unnamed-chunk-14-1.pdf Graphic file 
 (type pdf)
 <use diabetes_database_files/figure-latex/unnamed-chunk-14-1.pdf>
 Package pdftex.def Info: diabetes_database_files/figure-latex/unnamed-chunk-14-
-1.pdf  used on input line 609.
+1.pdf  used on input line 614.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
-Overfull \hbox (39.99884pt too wide) in paragraph at lines 609--610
+Overfull \hbox (39.99884pt too wide) in paragraph at lines 614--615
 [][] 
  []
 
@@ -1231,13 +1231,13 @@ Overfull \hbox (39.99884pt too wide) in paragraph at lines 609--610
 betes_database_files/figure-latex/unnamed-chunk-14-1.pdf>] (./diabetes_database
 .aux)
 Package rerunfilecheck Info: File `diabetes_database.out' has not changed.
-(rerunfilecheck)             Checksum: 5782A4B604D14C095EF98511668F8857;1226.
+(rerunfilecheck)             Checksum: 713621B0426BF3EB8BA7A9BD8D8C737D;1705.
  ) 
 Here is how much of TeX's memory you used:
- 16122 strings out of 481446
- 253827 string characters out of 5918361
- 575439 words of memory out of 5000000
- 32492 multiletter control sequences out of 15000+600000
+ 16131 strings out of 481446
+ 253982 string characters out of 5918361
+ 575567 words of memory out of 5000000
+ 32499 multiletter control sequences out of 15000+600000
  609006 words of font info for 91 fonts, out of 8000000 for 9000
  16 hyphenation exceptions out of 8191
  66i,12n,72p,390b,492s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1269,10 +1269,10 @@ e1/public/lm/lmr8.pfb><c:/Users/Rodrigo Araujo/AppData/Roaming/TinyTeX/texmf-di
 st/fonts/type1/public/lm/lmtk10.pfb><c:/Users/Rodrigo Araujo/AppData/Roaming/Ti
 nyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb><c:/Users/Rodrigo Araujo/AppD
 ata/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtti10.pfb>
-Output written on diabetes_database.pdf (11 pages, 1303784 bytes).
+Output written on diabetes_database.pdf (11 pages, 1305584 bytes).
 PDF statistics:
- 189 PDF objects out of 1000 (max. 8388607)
- 154 compressed objects within 2 object streams
- 32 named destinations out of 1000 (max. 500000)
- 82 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 203 PDF objects out of 1000 (max. 8388607)
+ 168 compressed objects within 2 object streams
+ 34 named destinations out of 1000 (max. 500000)
+ 106 words of extra memory for PDF output out of 10000 (max. 10000000)
 
