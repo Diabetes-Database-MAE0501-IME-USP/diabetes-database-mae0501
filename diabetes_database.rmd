@@ -1,0 +1,332 @@
+---
+title: "Aprendizagem Estatística em Altas Dimensões [MAE0501/MAE5904/IBI5904]"
+author: |
+  | Ícaro Maia Santos de Castro\thanks{Número USP: 11866921}
+  | Rayssa de Carvalho Roberto\thanks{Número USP: 10940828}
+  | Rodrigo Aoyama Nakahara\thanks{Número USP: 3510922} 
+  | Rodrigo Araujo\thanks{Número USP: 9299208}
+  | Vitor Hugo Vieira de Lima\thanks{Número USP: 10263886}
+date: "`r stringr::str_to_sentence(format(Sys.time(), '%B de %Y'))`"
+lang: pt-BR
+header-includes:
+  # - \usepackage[brazilian]{babel}
+  - \usepackage{float}
+  - \usepackage{amsmath}
+  - \usepackage{amsthm}
+  - \floatplacement{figure}{H}
+  - \usepackage{indentfirst}
+  - \setlength{\parindent}{4em}
+  - \setlength{\parskip}{1em}
+  - \usepackage{booktabs}
+  - \usepackage{dcolumn}
+  - \usepackage{bm}
+  - \usepackage{titling}
+  - \thanksmarkseries{arabic} % \thanks footnotes com numeros
+  - \usepackage[bottom]{footmisc} % corrige posição footnotes
+  - \usepackage{pdfpages}
+  - \usepackage{tocloft}
+  - \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+  - \usepackage{amssymb}
+  - \renewcommand\qedsymbol{$\blacksquare$}
+  - \usepackage{cleveref}
+output: 
+  pdf_document: 
+    fig_caption: yes
+    # number_sections: yes
+    toc: true
+    toc_depth: 2
+#keep_tex: true
+editor_options: 
+  chunk_output_type: console
+# bibliography: ref.bib
+---
+  
+\pagebreak
+
+\newcommand\invisiblesection[1]{%
+  \refstepcounter{section}%
+  \addcontentsline{toc}{section}{#1}%
+  \sectionmark{#1}}
+  
+<!-- \newcommand\invisiblesection[1]{% -->
+<!--   \refstepcounter{section}% -->
+<!--   \addcontentsline{toc}{section}{\protect\numberline{\thesection}#1}% -->
+<!--   \sectionmark{#1}} -->
+
+<!-- \newcommand\invisiblessection[1]{% -->
+<!--   \refstepcounter{subsection}% -->
+<!--   \addcontentsline{toc}{subsection}{\protect\numberline{\thesection}#1}% -->
+<!--   \sectionmark{#1}} -->
+
+```{r setup, include=FALSE}
+# options(tinytex.verbose = TRUE)
+
+# template com paramentros padrao para as figuras
+knitr::opts_template$set(figuras = list(echo = FALSE, 
+                                        results='hide', 
+                                        fig.show = "hold",
+                                        fig.align = 'center',
+                                        fig.ncol = 1,
+                                        # fig.width = 4,
+                                        # fig.height = 4,
+                                        out.width = "\\textwidth",
+                                        out.height = "0.9\\textheight"
+))
+knitr::opts_template$set(figuras2 = list(echo = FALSE, 
+                                         results='hide', 
+                                         fig.show = "hold",
+                                         fig.align = 'center',
+                                         fig.ncol = 2,
+                                         fig.width = 4,
+                                         out.width = "0.48\\textwidth", 
+                                         out.height = "0.30\\textheight"))
+
+knitr::opts_template$set(
+  series = list(echo = FALSE, 
+                results='hide', 
+                fig.show = "hold",
+                warning=FALSE,
+                fig.align = 'center',
+                fig.ncol = 1,
+                fig.heigth=3, 
+                fig.width=16
+                # out.width = "\\textheight"
+                ))
+
+# uso: <<r, opts.label='figuras'>>=
+# uso: ```{r, opts.label='figuras'}
+
+
+```
+
+```{r libs, include=FALSE}
+library(tidyverse)
+library(knitr)
+library(stargazer)
+library(tidyverse)
+library(kableExtra)
+library(ggplot2)
+library(readxl)
+library(MASS)
+library(psych)
+library(Hmisc)
+library(GPArotation)
+library(corrplot)
+
+
+library(vegan)
+```
+
+```{r func_aux, include=FALSE}
+# Funções auxliares ----
+
+kable <- function(...) {
+  args <- list(
+    ...,
+    {if(!interactive() & knitr::is_latex_output()) format = 'latex'},
+    digits = 2,
+    booktabs = TRUE,
+    format.args = list(
+      # scientific=T,
+      # nsmall = 2,
+      decimal.mark = ",", 
+      big.mark = "."
+      )
+    )
+  
+  args <- args[!duplicated(names(args))]
+  
+  do.call(knitr::kable, args) %>% kable_styling(latex_options = "HOLD_position")
+}
+
+
+
+```
+
+
+
+
+# Análise descritiva 
+
+O objetivo geral do problema é prever se a pessoa possui ou não diabetes mellitus, com base em uma série de variáveis preditoras. O desafio foi posto declaradamente como um problema de aprendizagem.
+
+O banco de dados possui todas suas observações constituídas de pessoas do gênero feminino, com idade superior a 21 anos, de ascendência do povo Pima (grupo de nativos norte-americanos). Os dados, que são atualmente abertos e gratuitos para download CC0 1.0, são provenientes do Instituto Nacional de Diabetes e Distúrbios Digestivos e do Rim (NIDDK) dos EUA e mantidos pela UC Irvine Machine Learning Repository (University of California-Irvine).
+
+
+```{r}
+
+diabetes <- read.csv("diabetes.csv")
+head(diabetes) %>% kable(caption="Dados.")
+summary(diabetes)
+
+
+```
+
+
+## Renomeando a variável 
+
+'Outcome' para 'diabetes'
+
+```{r}
+
+colnames(diabetes)[9] <- "diabetes"
+
+```
+
+## Reshape 
+
+**Diabetes?   =>   0 : No / 1 : Yes**
+
+```{r}
+
+diabetes$diabetes <- as.factor(diabetes$diabetes)
+
+levels(diabetes$diabetes) <- c("No","Yes")
+
+```
+
+
+## Visualização dos Dados {.tabset}
+
+### Estrutura dos Dados
+
+```{r}
+
+str(diabetes)
+
+```
+
+
+
+### Dimensão
+
+```{r}
+
+dim(diabetes)
+
+```
+
+
+# Análise Descritiva
+
+## Correlação entre cada variável
+
+```{r}
+
+library(PerformanceAnalytics)
+
+chart.Correlation(diabetes[,-9], histogram=TRUE, col="grey10", pch=1, main="Correlação entre ás variáveis explicativas")
+
+```
+
+
+
+
+
+```{r}
+library(GGally)
+
+ggcorr(diabetes[,-9], name = "corr", label = TRUE)+
+
+  theme(legend.position="none")+
+
+labs(title="Correlação entre ás variáveis explicativas")+
+
+theme(plot.title=element_text(face='bold',color='black',hjust=0.5,size=12))
+
+```
+
+
+
+```{r}
+
+library(tidyverse)
+library(modelr)
+library(dplyr)
+
+# para reprodução
+set.seed(23) 
+
+nrows <- NROW(diabetes)
+
+index <- sample(1:nrows, 0.7 * nrows)	# shuffle and divide
+
+
+
+# train <- diab                         # 768 test data (100%)
+
+train <- diabetes[index,]			        # 537 test data (70%)
+
+test <- diabetes[-index,]  		            # 231 test data (30%)
+
+
+```
+
+
+## Proporção de diabetes (Benign / Malignant) {.tabset}
+
+### train
+
+```{r}
+
+prop.table(table(train$diabetes))
+
+```
+
+
+
+### test
+
+```{r}
+
+prop.table(table(test$diabetes))
+
+```
+
+
+### RandomForest
+
+```{r}
+library(caret)
+library(randomForest)
+
+learn_rf <- randomForest(diabetes~., data=train, ntree=500, proximity=T, importance=T)
+
+pre_rf   <- predict(learn_rf, test[,-9])
+
+cm_rf    <- confusionMatrix(pre_rf, test$diabetes)
+
+cm_rf
+
+```
+
+```{r}
+
+plot(learn_rf, main="Random Forest (Error Rate vs. Number of Trees)")
+
+```
+
+
+
+#### Prediction Plot
+
+
+```{r}
+
+plot(margin(learn_rf,test$diabetes))
+
+```
+
+
+
+##### Variance Importance Plot
+
+```{r}
+
+varImpPlot(learn_rf)
+
+```
+
+
+
+
