@@ -146,7 +146,7 @@ kable <- function(...) {
 
 
 
-# Análise descritiva 
+# Importando os dados / Limpando / Inspecionando 
 
 O objetivo geral do problema é prever se a pessoa possui ou não diabetes mellitus, com base em uma série de variáveis preditoras. O desafio foi posto declaradamente como um problema de aprendizagem.
 
@@ -238,6 +238,11 @@ theme(plot.title=element_text(face='bold',color='black',hjust=0.5,size=12))
 
 
 
+
+# Modelagem
+
+## train / test
+
 ```{r}
 
 library(tidyverse)
@@ -284,7 +289,7 @@ prop.table(table(test$diabetes))
 ```
 
 
-### RandomForest
+## RandomForest
 
 ```{r}
 library(caret)
