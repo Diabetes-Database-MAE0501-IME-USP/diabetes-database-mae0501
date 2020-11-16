@@ -114,6 +114,20 @@ library(GPArotation)
 library(corrplot)
 
 
+library(dplyr)
+library(visdat)
+library(VIM)
+library(ggplot2)
+library(naniar)
+
+library(MLmetrics)
+library(ROCR)
+library(pROC)
+
+library(modelr)
+library(dplyr)
+
+
 library(vegan)
 ```
 
@@ -152,29 +166,23 @@ kable <- function(...) {
 
 ```{r}
 
-diabetes <- read.csv("diabetes.csv")
-head(diabetes) %>% kable(caption="Dados.")
-summary(diabetes)
+diabetes <- read_csv("C:\\Users\\Rodrigo Araujo\\Documents\\IME-USP\\Aprendizagem Estatística em Altas Dimensões\\diabetes-database-mae0501\\diabetes.csv")
 
+#diabetes <- read.csv("diabetes.csv")
+head(diabetes) %>% kable(caption="Dados.")
+
+dim(diabetes)
 
 ```
 
 
-## Renomeando a variável 
-
-'Outcome' para 'diabetes'
+## Renomear coluna e ajustar níveis de categórica
 
 ```{r}
+
+diabetes[, 2:6][diabetes[, 2:6] == 0] <- NA
 
 colnames(diabetes)[9] <- "diabetes"
-
-```
-
-## Reshape 
-#test
-**Diabetes?   =>   0 : No / 1 : Yes**
-
-```{r}
 
 diabetes$diabetes <- as.factor(diabetes$diabetes)
 
@@ -195,70 +203,99 @@ str(diabetes)
 
 
 
-### Dimensão
+
+
+# Analise dos Missings
+
+## Descritiva inicial
+
+```{r, warning=FALSE}
+
+summary(diabetes)
+
+```
+
+
 
 ```{r}
+vis_dat(diabetes)
 
-dim(diabetes)
+```
+
+```{r}
+vis_miss(diabetes)
+
+```
+
+```{r}
+aggr(diabetes) # Missings têm padrões?
+
+```
+
+```{r}
+ggplot(diabetes, aes(x = Insulin, y = SkinThickness)) + # Padrão de missing entre 2 vars com mais missings?
+  geom_miss_point()
+
+```
+
+```{r}
+ggplot(diabetes, aes(x = Insulin, y = SkinThickness)) + # Padrão de missing entre 2 vars com mais missings por categoria da resposta
+  geom_miss_point() + facet_wrap(~ diabetes)
+
+marginplot(diabetes[c(4,5)])
 
 ```
 
 
-# Análise Descritiva
+## Possibilidades de imputação
 
-## Correlação entre cada variável
+```{r}
+library(mice)
 
-```{r, warning=FALSE}
+imputacao1 <- mice(data = diabetes , m = 5, maxit = 50, meth = 'pmm', seed = 25)
+summary(imputacao1)
 
-library(PerformanceAnalytics)
+``` 
 
-chart.Correlation(diabetes[,-9], histogram=TRUE, col="grey10", pch=1, main="Correlação entre ás variáveis explicativas")
+
+```{r}
+imputado1 <- complete(imputacao1, 1)
+imputado2 <- complete(imputacao1, 2)
+imputado3 <- complete(imputacao1, 3)
+imputado4 <- complete(imputacao1, 4)
+imputado5 <- complete(imputacao1, 5)
+
+library(lattice)
+densityplot(imputacao1)
+
+``` 
+
+```{r}
+  
+diabetes$Glucose <- apply(cbind(imputado1$Glucose, imputado2$Glucose, imputado3$Glucose, imputado4$Glucose, imputado5$Glucose), 1, mean)  
+
+diabetes$BloodPressure <- apply(cbind(imputado1$BloodPressure, imputado2$BloodPressure, imputado3$BloodPressure, imputado4$BloodPressure, imputado5$BloodPressure), 1, mean)  
+
+diabetes$SkinThickness <- apply(cbind(imputado1$SkinThickness, imputado2$SkinThickness, imputado3$SkinThickness, imputado4$SkinThickness, imputado5$SkinThickness), 1, mean)  
+
+diabetes$Insulin <- apply(cbind(imputado1$Insulin, imputado2$Insulin, imputado3$Insulin, imputado4$Insulin, imputado5$Insulin), 1, mean)  
+
+diabetes$BMI <- apply(cbind(imputado1$BMI, imputado2$BMI, imputado3$BMI, imputado4$BMI, imputado5$BMI), 1, mean)  
 
 ```
 
 
 
-
-
-```{r, warning=FALSE}
-library(GGally)
-
-ggcorr(diabetes[,-9], name = "corr", label = TRUE)+
-
-  theme(legend.position="none")+
-
-labs(title="Correlação entre ás variáveis explicativas")+
-
-theme(plot.title=element_text(face='bold',color='black',hjust=0.5,size=12))
-
-```
-
-
-
-
-# Modelagem
-
-## train / test
+# train / test
 
 ```{r, warning=FALSE}
-
-library(tidyverse)
-library(modelr)
-library(dplyr)
 
 # para reprodução
 set.seed(23) 
-
-nrows <- NROW(diabetes)
-
+nrows <- nrow(diabetes)
 index <- sample(1:nrows, 0.7 * nrows)	# shuffle and divide
-
-
-
 # train <- diab                         # 768 test data (100%)
-
 train <- diabetes[index,]			        # 537 test data (70%)
-
 test <- diabetes[-index,]  		            # 231 test data (30%)
 
 
@@ -275,8 +312,6 @@ prop.table(table(train$diabetes))
 
 ```
 
-
-
 ### test
 
 ```{r}
@@ -286,10 +321,107 @@ prop.table(table(test$diabetes))
 ```
 
 
-## RandomForest
+# Análise Descritiva
+
+## Distribuição da variável Diabetes 
+
+
+```{r, warning=FALSE}
+
+ggplot(train, aes(diabetes, fill = diabetes)) + 
+  geom_bar() +
+  theme_bw() +
+  labs(title = "Classificação Diabetes", x = "Diabetes") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+
+## Correlação entre cada variável
+
+```{r, warning=FALSE}
+
+library(PerformanceAnalytics)
+
+chart.Correlation(train[,-9], histogram=TRUE, col="grey10", pch=1, main="Correlação entre ás variáveis explicativas")
+
+```
+
+
+
+
+```{r, warning=FALSE}
+library(ggcorrplot)
+
+corr<-round(cor(train[,-9]),1)
+ggcorrplot(corr, hc.order = TRUE, 
+           type = "lower", 
+           lab = TRUE, 
+           lab_size = 3, 
+           method="circle", 
+           colors = c("red", "white", "blue"), 
+           title="Correlogram of Diabetes data", 
+           ggtheme=theme_bw)
+
+```
+
+
+
+
+# Modelagem
+
+## SVM
 
 ```{r, warning=FALSE}
 library(caret)
+library(e1071)
+
+set.seed(123)
+
+linear.tune <- e1071::tune.svm(diabetes ~.,
+                                data   = train,
+                                kernel = 'linear',
+                                cost   = c(0.001, 0.01, 0.1, 1, 5, 10))
+summary(linear.tune)
+
+```
+
+Matriz de Confusão
+
+```{r, warning=FALSE}
+
+svm.real <- test$diabetes
+
+best.linear <- linear.tune$best.model
+tune.test <- predict(best.linear, test[,-9])
+
+caret::confusionMatrix(data = tune.test,
+                       reference = svm.real,
+                       positive  = 'Yes')
+
+```
+
+Curva ROC
+
+```{r, warning=FALSE}
+
+svm.predobj <- ROCR::prediction(predictions = as.numeric(x = tune.test ),
+                            labels      = as.numeric(x = svm.real))
+svm.perform <- ROCR::performance(prediction.obj = svm.predobj,
+                                 measure        = 'tpr',
+                                 x.measure      = 'fpr')
+plot(x = svm.perform, main = 'ROC curve')
+MLmetrics::F1_Score(y_pred   = tune.test ,
+                    y_true   = svm.real,
+                    positive = "Yes"); pROC::auc(response = as.numeric(x = svm.real),
+                                                 predictor = as.numeric(x = tune.test))
+
+```
+
+
+## RandomForest
+
+```{r, warning=FALSE}
 library(randomForest)
 
 learn_rf <- randomForest(diabetes~., data=train, ntree=500, proximity=T, importance=T)
