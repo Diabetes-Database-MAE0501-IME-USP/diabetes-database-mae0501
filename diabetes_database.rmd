@@ -202,90 +202,6 @@ str(diabetes)
 ```
 
 
-
-
-
-# Analise dos Missings
-
-## Descritiva inicial
-
-```{r, warning=FALSE}
-
-summary(diabetes)
-
-```
-
-
-
-```{r}
-vis_dat(diabetes)
-
-```
-
-```{r}
-vis_miss(diabetes)
-
-```
-
-```{r}
-aggr(diabetes) # Missings têm padrões?
-
-```
-
-```{r}
-ggplot(diabetes, aes(x = Insulin, y = SkinThickness)) + # Padrão de missing entre 2 vars com mais missings?
-  geom_miss_point()
-
-```
-
-```{r}
-ggplot(diabetes, aes(x = Insulin, y = SkinThickness)) + # Padrão de missing entre 2 vars com mais missings por categoria da resposta
-  geom_miss_point() + facet_wrap(~ diabetes)
-
-marginplot(diabetes[c(4,5)])
-
-```
-
-
-## Possibilidades de imputação
-
-```{r}
-library(mice)
-
-imputacao1 <- mice(data = diabetes , m = 5, maxit = 50, meth = 'pmm', seed = 25)
-summary(imputacao1)
-
-``` 
-
-
-```{r}
-imputado1 <- complete(imputacao1, 1)
-imputado2 <- complete(imputacao1, 2)
-imputado3 <- complete(imputacao1, 3)
-imputado4 <- complete(imputacao1, 4)
-imputado5 <- complete(imputacao1, 5)
-
-library(lattice)
-densityplot(imputacao1)
-
-``` 
-
-```{r}
-  
-diabetes$Glucose <- apply(cbind(imputado1$Glucose, imputado2$Glucose, imputado3$Glucose, imputado4$Glucose, imputado5$Glucose), 1, mean)  
-
-diabetes$BloodPressure <- apply(cbind(imputado1$BloodPressure, imputado2$BloodPressure, imputado3$BloodPressure, imputado4$BloodPressure, imputado5$BloodPressure), 1, mean)  
-
-diabetes$SkinThickness <- apply(cbind(imputado1$SkinThickness, imputado2$SkinThickness, imputado3$SkinThickness, imputado4$SkinThickness, imputado5$SkinThickness), 1, mean)  
-
-diabetes$Insulin <- apply(cbind(imputado1$Insulin, imputado2$Insulin, imputado3$Insulin, imputado4$Insulin, imputado5$Insulin), 1, mean)  
-
-diabetes$BMI <- apply(cbind(imputado1$BMI, imputado2$BMI, imputado3$BMI, imputado4$BMI, imputado5$BMI), 1, mean)  
-
-```
-
-
-
 # train / test
 
 ```{r, warning=FALSE}
@@ -319,6 +235,123 @@ prop.table(table(train$diabetes))
 prop.table(table(test$diabetes))
 
 ```
+
+
+
+# Analise dos Missings
+
+## Descritiva inicial
+
+```{r, warning=FALSE}
+
+summary(train)
+
+```
+
+
+
+```{r}
+vis_dat(train)
+
+```
+
+```{r}
+vis_miss(train)
+
+```
+
+```{r}
+aggr(train) # Missings têm padrões?
+
+```
+
+```{r}
+ggplot(train, aes(x = Insulin, y = SkinThickness)) + # Padrão de missing entre 2 vars com mais missings?
+  geom_miss_point()
+
+```
+
+```{r}
+ggplot(train, aes(x = Insulin, y = SkinThickness)) + # Padrão de missing entre 2 vars com mais missings por categoria da resposta
+  geom_miss_point() + facet_wrap(~ diabetes)
+
+marginplot(diabetes[c(4,5)])
+
+```
+
+
+
+
+## Possibilidades de imputação
+
+```{r}
+library(mice)
+
+imputacao_train <- mice(data = train , m = 5, maxit = 50, meth = 'pmm', seed = 25)
+summary(imputacao_train)
+
+``` 
+
+```{r}
+imputado_train_1 <- complete(imputacao_train, 1)
+imputado_train_2 <- complete(imputacao_train, 2)
+imputado_train_3 <- complete(imputacao_train, 3)
+imputado_train_4 <- complete(imputacao_train, 4)
+imputado_train_5 <- complete(imputacao_train, 5)
+
+library(lattice)
+densityplot(imputacao_train)
+
+``` 
+
+```{r}
+  
+train$Glucose <- apply(cbind(imputado_train_1$Glucose, imputado_train_2$Glucose, imputado_train_3$Glucose, imputado_train_4$Glucose, imputado_train_5$Glucose), 1, mean)  
+
+train$BloodPressure <- apply(cbind(imputado_train_1$BloodPressure, imputado_train_2$BloodPressure, imputado_train_3$BloodPressure, imputado_train_4$BloodPressure, imputado_train_5$BloodPressure), 1, mean)  
+
+train$SkinThickness <- apply(cbind(imputado_train_1$SkinThickness, imputado_train_2$SkinThickness, imputado_train_3$SkinThickness, imputado_train_4$SkinThickness, imputado_train_5$SkinThickness), 1, mean)  
+
+train$Insulin <- apply(cbind(imputado_train_1$Insulin, imputado_train_2$Insulin, imputado_train_3$Insulin, imputado_train_4$Insulin, imputado_train_5$Insulin), 1, mean)  
+
+train$BMI <- apply(cbind(imputado_train_1$BMI, imputado_train_2$BMI, imputado_train_3$BMI, imputado_train_4$BMI, imputado_train_5$BMI), 1, mean)  
+
+```
+
+
+
+```{r}
+imputacao_test <- mice(data = test , m = 5, maxit = 50, meth = 'pmm', seed = 25)
+summary(imputacao_test)
+
+```
+
+
+```{r}
+imputado_test_1 <- complete(imputacao_test, 1)
+imputado_test_2 <- complete(imputacao_test, 2)
+imputado_test_3 <- complete(imputacao_test, 3)
+imputado_test_4 <- complete(imputacao_test, 4)
+imputado_test_5 <- complete(imputacao_test, 5)
+
+``` 
+
+```{r}
+  
+test$Glucose <- apply(cbind(imputado_test_1$Glucose, imputado_test_2$Glucose, imputado_test_3$Glucose, imputado_test_4$Glucose, imputado_test_5$Glucose), 1, mean)  
+
+test$BloodPressure <- apply(cbind(imputado_test_1$BloodPressure, imputado_test_2$BloodPressure, imputado_test_3$BloodPressure, imputado_test_4$BloodPressure, imputado_test_5$BloodPressure), 1, mean)  
+
+test$SkinThickness <- apply(cbind(imputado_test_1$SkinThickness, imputado_test_2$SkinThickness, imputado_test_3$SkinThickness, imputado_test_4$SkinThickness, imputado_test_5$SkinThickness), 1, mean)  
+
+test$Insulin <- apply(cbind(imputado_test_1$Insulin, imputado_test_2$Insulin, imputado_test_3$Insulin, imputado_test_4$Insulin, imputado_test_5$Insulin), 1, mean)  
+
+test$BMI <- apply(cbind(imputado_test_1$BMI, imputado_test_2$BMI, imputado_test_3$BMI, imputado_test_4$BMI, imputado_test_5$BMI), 1, mean)  
+
+```
+
+
+
 
 
 # Análise Descritiva
