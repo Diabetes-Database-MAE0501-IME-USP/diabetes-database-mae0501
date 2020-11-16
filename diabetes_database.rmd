@@ -1,44 +1,42 @@
 ---
 title: "Aprendizagem Estatística em Altas Dimensões [MAE0501/MAE5904/IBI5904]"
-author: |
-  | Ícaro Maia Santos de Castro\thanks{Número USP: 11866921}
-  | Rayssa de Carvalho Roberto\thanks{Número USP: 10940828}
-  | Rodrigo Aoyama Nakahara\thanks{Número USP: 3510922} 
-  | Rodrigo Araujo\thanks{Número USP: 9299208}
-  | Vitor Hugo Vieira de Lima\thanks{Número USP: 10263886}
+author: ""| Ícaro Maia Santos de Castro\\thanks{Número USP: 11866921}\n| Rayssa de"
+  Carvalho Roberto\\thanks{Número USP: 10940828}\n| Rodrigo Aoyama Nakahara\\thanks{Número
+  USP: 3510922} \n| Rodrigo Araujo\\thanks{Número USP: 9299208}\n| Vitor Hugo Vieira
+  de Lima\\thanks{Número USP: 10263886}\n"
 date: "`r stringr::str_to_sentence(format(Sys.time(), '%B de %Y'))`"
+output:
+  html_document:
+    df_print: paged
+    toc: yes
+    toc_depth: '2'
+  pdf_document:
+    fig_caption: yes
+    toc: yes
+    toc_depth: 2
 lang: pt-BR
 header-includes:
-  # - \usepackage[brazilian]{babel}
-  - \usepackage{float}
-  - \usepackage{amsmath}
-  - \usepackage{amsthm}
-  - \floatplacement{figure}{H}
-  - \usepackage{indentfirst}
-  - \setlength{\parindent}{4em}
-  - \setlength{\parskip}{1em}
-  - \usepackage{booktabs}
-  - \usepackage{dcolumn}
-  - \usepackage{bm}
-  - \usepackage{titling}
-  - \thanksmarkseries{arabic} % \thanks footnotes com numeros
-  - \usepackage[bottom]{footmisc} % corrige posição footnotes
-  - \usepackage{pdfpages}
-  - \usepackage{tocloft}
-  - \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
-  - \usepackage{amssymb}
-  - \renewcommand\qedsymbol{$\blacksquare$}
-  - \usepackage{cleveref}
-output: 
-  pdf_document: 
-    fig_caption: yes
-    # number_sections: yes
-    toc: true
-    toc_depth: 2
-#keep_tex: true
-editor_options: 
+- \usepackage{float}
+- \usepackage{amsmath}
+- \usepackage{amsthm}
+- \floatplacement{figure}{H}
+- \usepackage{indentfirst}
+- \setlength{\parindent}{4em}
+- \setlength{\parskip}{1em}
+- \usepackage{booktabs}
+- \usepackage{dcolumn}
+- \usepackage{bm}
+- \usepackage{titling}
+- \thanksmarkseries{arabic} % \thanks footnotes com numeros
+- \usepackage[bottom]{footmisc} % corrige posição footnotes
+- \usepackage{pdfpages}
+- \usepackage{tocloft}
+- \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+- \usepackage{amssymb}
+- \renewcommand\qedsymbol{$\blacksquare$}
+- \usepackage{cleveref}
+editor_options:
   chunk_output_type: console
-# bibliography: ref.bib
 ---
   
 \pagebreak
@@ -399,6 +397,17 @@ ggcorrplot(corr, hc.order = TRUE,
 ```
 
 
+# Remoção de NAs
+```{r, warning=FALSE}
+
+train_without_NAs <- train[complete.cases(train), ]
+dim(train_without_NAs)
+
+test_without_NAs <- test[complete.cases(test), ]
+dim(test_without_NAs)
+
+```
+
 
 
 # Modelagem
@@ -453,15 +462,130 @@ MLmetrics::F1_Score(y_pred   = tune.test ,
 
 
 ## RandomForest
-
+### RandomForest sem imputação
+#### K-fold cross validation
 ```{r, warning=FALSE}
+library(caret)
 library(randomForest)
 
-learn_rf <- randomForest(diabetes~., data=train, ntree=500, proximity=T, importance=T)
+# Define the control
+trControl <- trainControl(method = "cv",
+    number = 10,
+    search = "grid")
 
-pre_rf   <- predict(learn_rf, test[,-9])
+set.seed(1234)
+# Run the model
+rf_default <- train(diabetes ~.,
+    data = train_without_NAs,
+    method = "rf",
+    metric = "Accuracy",
+    trControl = trControl)
+# Print the results
+print(rf_default)
 
-cm_rf    <- confusionMatrix(pre_rf, test$diabetes)
+```
+
+#### Search best mtry (Number of candidates draw to feed the algorithm)
+```{r,warning=FALSE}
+set.seed(1234)
+tuneGrid <- expand.grid(.mtry = c(1: 10))
+rf_mtry <- train(diabetes ~.,
+    data = train_without_NAs,
+    method = "rf",
+    metric = "Accuracy",
+    tuneGrid = tuneGrid,
+    trControl = trControl,
+    importance = TRUE,
+    nodesize = 14,
+    ntree = 300)
+print(rf_mtry)
+#The best value of mtry is stored in 
+best_mtry <- rf_mtry$bestTune$mtry
+best_mtry
+```
+
+#### Search best maxnodes (Number of candidates draw to feed the algorithm)
+Lets find the maximum amount of terminal nodes in the forest searching for the best maxnodes
+```{r}
+store_maxnode <- list()
+tuneGrid <- expand.grid(.mtry = best_mtry)
+for (maxnodes in c(5: 15)) {
+    set.seed(1234)
+    rf_maxnode <- train(diabetes~.,
+        data = train_without_NAs,
+        method = "rf",
+        metric = "Accuracy",
+        tuneGrid = tuneGrid,
+        trControl = trControl,
+        importance = TRUE,
+        nodesize = 14,
+        maxnodes = maxnodes,
+        ntree = 300)
+    current_iteration <- toString(maxnodes)
+    store_maxnode[[current_iteration]] <- rf_maxnode
+}
+results_mtry <- resamples(store_maxnode)
+summary(results_mtry)
+```
+
+Lets try again adding more nodes to our maxnodes search
+```{r}
+store_maxnode <- list()
+tuneGrid <- expand.grid(.mtry = best_mtry)
+for (maxnodes in c(20: 30)) {
+    set.seed(1234)
+    rf_maxnode <- train(diabetes~.,
+        data = train_without_NAs,
+        method = "rf",
+        metric = "Accuracy",
+        tuneGrid = tuneGrid,
+        trControl = trControl,
+        importance = TRUE,
+        nodesize = 14,
+        maxnodes = maxnodes,
+        ntree = 300)
+    key <- toString(maxnodes)
+    store_maxnode[[key]] <- rf_maxnode
+}
+results_node <- resamples(store_maxnode)
+summary(results_node)
+```
+Based on these metrics the best maxnodes values should be 20!
+
+#### Search the best ntrees (Number of candidates draw to feed the algorithm)
+
+```{r}
+store_maxtrees <- list()
+for (ntree in c(250, 300, 350, 400, 450, 500, 550, 600, 800, 1000, 2000)) {
+    set.seed(5678)
+    rf_maxtrees <- train(diabetes~.,
+        data = train_without_NAs,
+        method = "rf",
+        metric = "Accuracy",
+        tuneGrid = tuneGrid,
+        trControl = trControl,
+        importance = TRUE,
+        nodesize = 14,
+        maxnodes = 24,
+        ntree = ntree)
+    key <- toString(ntree)
+    store_maxtrees[[key]] <- rf_maxtrees
+}
+results_tree <- resamples(store_maxtrees)
+summary(results_tree)
+```
+Based on these metrics the best maxnodes values should be 1000
+
+#### Run RandomForest with without tuning parameters 
+```{r, warning=FALSE}
+library(randomForest)
+library(caret)
+set.seed(1234)
+learn_rf <- randomForest(diabetes ~., data=train_without_NAs, ntree=1000, proximity=T, importance=T)
+
+pre_rf   <- predict(learn_rf, test_without_NAs[,-9])
+
+cm_rf    <- confusionMatrix(pre_rf, test_without_NAs$diabetes)
 
 cm_rf
 
@@ -491,8 +615,39 @@ plot(margin(learn_rf,test$diabetes))
 ```{r}
 
 varImpPlot(learn_rf)
+varImp(learn_rf)
 
 ```
+
+
+#### Run RandomForest with the final model using tuning
+```{r}
+set.seed(1234)
+learn_rf <- train(diabetes~.,
+    train_without_NAs,
+    method = "rf",
+    metric = "Accuracy",
+    tuneGrid = tuneGrid,
+    trControl = trControl,
+    importance = TRUE,
+    nodesize = 14,
+    ntree = 1000,
+    maxnodes = 20)
+```
+
+#### Evaluate the final model
+```{r}
+pre_rf   <- predict(learn_rf, test_without_NAs[,-9])
+
+cm_rf    <- confusionMatrix(pre_rf, test_without_NAs$diabetes)
+
+cm_rf
+```
+
+
+
+
+
 
 
 
