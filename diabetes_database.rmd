@@ -278,6 +278,16 @@ marginplot(diabetes[c(4,5)])
 ```
 
 
+# Remoção de NAs
+```{r, warning=FALSE}
+
+train_without_NAs <- train[complete.cases(train), ]
+dim(train_without_NAs)
+
+test_without_NAs <- test[complete.cases(test), ]
+dim(test_without_NAs)
+
+```
 
 
 ## Possibilidades de imputação
@@ -396,16 +406,7 @@ ggcorrplot(corr, hc.order = TRUE,
 ```
 
 
-# Remoção de NAs
-```{r, warning=FALSE}
 
-train_without_NAs <- train[complete.cases(train), ]
-dim(train_without_NAs)
-
-test_without_NAs <- test[complete.cases(test), ]
-dim(test_without_NAs)
-
-```
 
 
 
@@ -623,7 +624,7 @@ varImp(learn_rf)
 #### Run RandomForest with the final model using tuning
 ```{r}
 set.seed(1234)
-learn_rf <- train(diabetes~.,
+learn_rf_final <- train(diabetes~.,
     train_without_NAs,
     method = "rf",
     metric = "Accuracy",
@@ -637,14 +638,87 @@ learn_rf <- train(diabetes~.,
 
 #### Evaluate the final model
 ```{r}
-pre_rf   <- predict(learn_rf, test_without_NAs[,-9])
+pre_rf   <- predict(learn_rf_final, test_without_NAs[,-9])
 
 cm_rf    <- confusionMatrix(pre_rf, test_without_NAs$diabetes)
 
 cm_rf
 ```
 
+#### prepare to plot trees
+```{r}
+library(dplyr)
+library(ggraph)
+library(igraph)
 
+tree_func <- function(final_model, 
+                      tree_num) {
+  
+  # get tree by index
+  tree <- randomForest::getTree(final_model, 
+                                k = tree_num, 
+                                labelVar = TRUE) %>%
+    tibble::rownames_to_column() %>%
+    # make leaf split points to NA, so the 0s won't get plotted
+    mutate(`split point` = ifelse(is.na(prediction), `split point`, NA))
+  
+  # prepare data frame for graph
+  graph_frame <- data.frame(from = rep(tree$rowname, 2),
+                            to = c(tree$`left daughter`, tree$`right daughter`))
+  
+  # convert to graph and delete the last node that we don't want to plot
+  graph <- graph_from_data_frame(graph_frame) %>%
+    delete_vertices("0")
+  
+  # set node labels
+  V(graph)$node_label <- gsub("_", " ", as.character(tree$`split var`))
+  V(graph)$leaf_label <- as.character(tree$prediction)
+  V(graph)$split <- as.character(round(tree$`split point`, digits = 2))
+  
+  # plot
+  plot <- ggraph(graph, 'dendrogram') + 
+    theme_bw() +
+    geom_edge_link() +
+    geom_node_point() +
+    geom_node_text(aes(label = node_label), na.rm = TRUE, repel = TRUE) +
+    geom_node_label(aes(label = split), vjust = 2, na.rm = TRUE, fill = "white") +
+    geom_node_label(aes(label = leaf_label, fill = leaf_label), na.rm = TRUE, 
+					repel = TRUE, colour = "white", fontface = "bold", show.legend = FALSE) +
+    theme(panel.grid.minor = element_blank(),
+          panel.grid.major = element_blank(),
+          panel.background = element_blank(),
+          plot.background = element_rect(fill = "white"),
+          panel.border = element_blank(),
+          axis.line = element_blank(),
+          axis.text.x = element_blank(),
+          axis.text.y = element_blank(),
+          axis.ticks = element_blank(),
+          axis.title.x = element_blank(),
+          axis.title.y = element_blank(),
+          plot.title = element_text(size = 14))
+  
+  return(plot)
+}
+
+```
+
+
+#Plot minimun tree
+```{r}
+tree_num <- which(learn_rf_final$finalModel$forest$ndbigtree == min(learn_rf_final$finalModel$forest$ndbigtree))
+tree_func(final_model = learn_rf_final$finalModel, tree_num)
+```
+
+#Plot different trees 
+```{r}
+tr_min <- tree_func(final_model = learn_rf_final$finalModel, tree_num)
+tr_10 <- tree_func(final_model = learn_rf_final$finalModel, 10)
+tr_100 <- tree_func(final_model = learn_rf_final$finalModel, 100)
+tr_50 <- tree_func(final_model = learn_rf_final$finalModel, 50)
+ggarrange(tr_min, tr_50, tr_10,tr_100, 
+          labels = c("A", "B", "C", "D"),
+          ncol = 2, nrow = 2)
+```
 
 
 
