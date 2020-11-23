@@ -577,7 +577,7 @@ summary(results_tree)
 ```
 Based on these metrics the best maxnodes values should be 1000
 
-#### Run RandomForest with without tuning parameters 
+#### Run RandomForest without tuning parameters 
 ```{r, warning=FALSE}
 library(randomForest)
 library(caret)

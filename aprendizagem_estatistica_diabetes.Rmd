@@ -1,0 +1,523 @@
+---
+title: "Descritiva, AD e Logística"
+author: "Rodrigo A. Nakahara"
+date: "23/11/2020"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
+```
+
+# Preparar dados e subconjuntos de treino e teste (omitir essa parte - é só pra obter os dados para os modelos)
+
+```{r include=FALSE}
+
+library(readr)
+library(dplyr)
+#library(visdat)
+#library(VIM)
+#library(ggplo2)
+#library(naniar)
+library(caret)
+
+#setwd("~/diabetes-database-mae0501/")
+diabetes <- read_csv("diabetes.csv")
+colnames(diabetes)[9] <- "diabetes"
+diabetes$diabetes <- as.factor(diabetes$diabetes)
+levels(diabetes$diabetes) <- c("No","Yes")
+
+# Missings
+diabetes[, 2:6][diabetes[, 2:6] == 0] <- NA
+
+# Suconjuntos de treino, teste e teste fora da amostra
+set.seed(23) 
+nrows <- nrow(diabetes)
+index <- sample(1:nrows, 0.7 * nrows)	# shuffle and divide
+# train <- diab                         # 768 test data (100%)
+train <- diabetes[index,]			        # 537 test data (70%)
+test <- diabetes[-index,]  		            # 231 test data (30%)
+nrows <- nrow(test)
+index <- sample(1:nrows, 0.7 * nrows)
+test <- test[index,]
+test_out_sample <- test[-index,]
+
+# Subconjuntos sem missings
+train_without_NAs <- train[complete.cases(train), ]
+test_without_NAs <- test[complete.cases(test), ]
+test_out_sample_whitout_NAs <- test_out_sample[complete.cases(test_out_sample), ]
+
+# Subconjuntos imputado
+library(mice)
+
+imputacao_train <- mice(data = train , m = 5, maxit = 50, meth = 'pmm', seed = 23) # Imputação no conjunto de treino
+
+imputado_train_1 <- complete(imputacao_train, 1)
+imputado_train_2 <- complete(imputacao_train, 2)
+imputado_train_3 <- complete(imputacao_train, 3)
+imputado_train_4 <- complete(imputacao_train, 4)
+imputado_train_5 <- complete(imputacao_train, 5)
+
+train$Glucose <- apply(cbind(imputado_train_1$Glucose, imputado_train_2$Glucose, imputado_train_3$Glucose, imputado_train_4$Glucose, imputado_train_5$Glucose), 1, mean)  
+train$BloodPressure <- apply(cbind(imputado_train_1$BloodPressure, imputado_train_2$BloodPressure, imputado_train_3$BloodPressure, imputado_train_4$BloodPressure, imputado_train_5$BloodPressure), 1, mean)  
+train$SkinThickness <- apply(cbind(imputado_train_1$SkinThickness, imputado_train_2$SkinThickness, imputado_train_3$SkinThickness, imputado_train_4$SkinThickness, imputado_train_5$SkinThickness), 1, mean)  
+train$Insulin <- apply(cbind(imputado_train_1$Insulin, imputado_train_2$Insulin, imputado_train_3$Insulin, imputado_train_4$Insulin, imputado_train_5$Insulin), 1, mean)  
+train$BMI <- apply(cbind(imputado_train_1$BMI, imputado_train_2$BMI, imputado_train_3$BMI, imputado_train_4$BMI, imputado_train_5$BMI), 1, mean)  
+
+imputacao_test <- mice(data = test , m = 5, maxit = 50, meth = 'pmm', seed = 23) # Imputação no conjunto de teste
+
+imputado_test_1 <- complete(imputacao_test, 1)
+imputado_test_2 <- complete(imputacao_test, 2)
+imputado_test_3 <- complete(imputacao_test, 3)
+imputado_test_4 <- complete(imputacao_test, 4)
+imputado_test_5 <- complete(imputacao_test, 5)
+
+test$Glucose <- apply(cbind(imputado_test_1$Glucose, imputado_test_2$Glucose, imputado_test_3$Glucose, imputado_test_4$Glucose, imputado_test_5$Glucose), 1, mean)  
+test$BloodPressure <- apply(cbind(imputado_test_1$BloodPressure, imputado_test_2$BloodPressure, imputado_test_3$BloodPressure, imputado_test_4$BloodPressure, imputado_test_5$BloodPressure), 1, mean)  
+test$SkinThickness <- apply(cbind(imputado_test_1$SkinThickness, imputado_test_2$SkinThickness, imputado_test_3$SkinThickness, imputado_test_4$SkinThickness, imputado_test_5$SkinThickness), 1, mean)  
+test$Insulin <- apply(cbind(imputado_test_1$Insulin, imputado_test_2$Insulin, imputado_test_3$Insulin, imputado_test_4$Insulin, imputado_test_5$Insulin), 1, mean)  
+test$BMI <- apply(cbind(imputado_test_1$BMI, imputado_test_2$BMI, imputado_test_3$BMI, imputado_test_4$BMI, imputado_test_5$BMI), 1, mean)  
+
+imputacao_test_out_sample <- mice(data = test_out_sample , m = 5, maxit = 50, meth = 'pmm', seed = 23) # Imputação no conjunto de teste fora da amostra
+
+imputado_test_out_sample_1 <- complete(imputacao_test_out_sample, 1)
+imputado_test_out_sample_2 <- complete(imputacao_test_out_sample, 2)
+imputado_test_out_sample_3 <- complete(imputacao_test_out_sample, 3)
+imputado_test_out_sample_4 <- complete(imputacao_test_out_sample, 4)
+imputado_test_out_sample_5 <- complete(imputacao_test_out_sample, 5)
+
+test_out_sample$Glucose <- apply(cbind(imputado_test_out_sample_1$Glucose, imputado_test_out_sample_2$Glucose, imputado_test_out_sample_3$Glucose, imputado_test_out_sample_4$Glucose, imputado_test_out_sample_5$Glucose), 1, mean)  
+test_out_sample$BloodPressure <- apply(cbind(imputado_test_out_sample_1$BloodPressure, imputado_test_out_sample_2$BloodPressure, imputado_test_out_sample_3$BloodPressure, imputado_test_out_sample_4$BloodPressure, imputado_test_out_sample_5$BloodPressure), 1, mean)  
+test_out_sample$SkinThickness <- apply(cbind(imputado_test_out_sample_1$SkinThickness, imputado_test_out_sample_2$SkinThickness, imputado_test_out_sample_3$SkinThickness, imputado_test_out_sample_4$SkinThickness, imputado_test_out_sample_5$SkinThickness), 1, mean)  
+test_out_sample$Insulin <- apply(cbind(imputado_test_out_sample_1$Insulin, imputado_test_out_sample_2$Insulin, imputado_test_out_sample_3$Insulin, imputado_test_out_sample_4$Insulin, imputado_test_out_sample_5$Insulin), 1, mean)  
+test_out_sample$BMI <- apply(cbind(imputado_test_out_sample_1$BMI, imputado_test_out_sample_2$BMI, imputado_test_out_sample_3$BMI, imputado_test_out_sample_4$BMI, imputado_test_out_sample_5$BMI), 1, mean)  
+
+
+```
+
+
+# Análise Descritiva
+
+```{r}
+
+# OBS: análise descritiva com base no conjunto de treinamento para evitar data snooping
+
+library(dplyr)
+library(caret)
+library(lattice)
+library(ggplot2)
+library(GGally)
+library(ggcorrplot)
+library(scales)
+library(pROC)
+
+# Distribuição da variável resposta
+
+train %>% count(Diabetes = factor(diabetes)) %>% mutate(pct = prop.table(n)) %>%
+  ggplot(aes(x = Diabetes, y = pct, fill = pct, label = scales::percent(pct))) +
+  geom_col(position = 'dodge', fill="steelblue") + 
+  labs(title = "Classificação Diabetes", x = "Diabetes", y = "") +
+  geom_text(aes(label=scales::percent(pct) ), vjust=1.6, color="white", size=10) +
+  scale_y_continuous(labels = scales::percent) +
+  theme(plot.title = element_text(hjust = 0.5), legend.title = element_blank())
+
+# Matriz completa com dispersão, densidades, correlações, retas de regressão (com IC) e LOESS (com IC)
+      
+      # Função auxiliar para curvas de regressão linear e LOESS nos gráficos abaixo
+      curvas <- function(data, mapping, ...){
+        p <- ggplot(data = data, mapping = mapping) + 
+          geom_point(size = 0.5) + 
+          geom_smooth(method = loess, fill = "red", color = "red", ...) +
+          geom_smooth(method = lm, fill = "blue", color = "blue", ...)
+        p
+      } 
+      
+ggpairs(train, columns = 1:9, lower = list(continuous = curvas)) + # Obs: pode demorar para montar o gráfico
+    theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  
+# Correlações/Correlograma  
+corr<-round(cor(train[,-9]),1)
+ggcorrplot(corr, hc.order = TRUE, 
+           type = "lower", 
+           lab = TRUE, 
+           lab_size = 3, 
+           method="circle", 
+           colors = c("red", "white", "blue"), 
+           title="Correlograma de Diabetes", 
+           ggtheme=theme_bw)  
+  
+# Distribuição da diabetes Yes/No por feature
+  
+featurePlot(x = train[, 1:8], # Densidades alisadas
+            y = train$diabetes,
+            plot = "density", 
+            scales = list(x = list(relation="free"), y = list(relation="free")), 
+            adjust = 1.5, 
+            pch = "|", 
+            layout = c(4, 2), 
+            auto.key = list(columns = 4),
+            par.settings = list(strip.background=list(col="lightgrey"),
+            superpose.line = list(col = c("darkblue","darkred")),
+            superpose.symbol = list(col = c("darkblue","darkred")) ))
+
+featurePlot(x = train[, 1:8], # Boxplots
+            y = train$diabetes, 
+            plot = "box", 
+            scales = list(y = list(relation="free"), x = list(rot = 90)),  
+            layout = c(4,2 ), 
+            auto.key = list(columns = 4),
+            par.settings = list(strip.background=list(col="lightgrey")))
+
+```
+
+**Funções auxiliares**
+
+```{r}
+
+library(dplyr)
+library(ggraph)
+library(igraph)
+
+plotaroc <- function(rocobj, titulo = "Curva ROC"){
+  # Função que plota as curvas roc para os modelos ajustados 
+  b <- which.max(rocobj$sensitivities + rocobj$specificities)
+  best <- round(c(rocobj$thresholds[b],rocobj$specificities[b],rocobj$sensitivities[b]), 3)
+  
+  pROC::ggroc(rocobj, col = "red", alpha = 0.5, size = 0.5) + 
+    theme_gray() + 
+    ggtitle(titulo) + 
+    geom_abline(intercept = 1, slope=1, linetype = "dashed") +
+    labs(x="Especificidade", y = "Sensibilidade")  +
+    geom_point(data = tibble(Sensibilidade = best[2],
+                             Especificidade = best[3]),
+               mapping = aes(x=Sensibilidade, y=Especificidade),
+               col = "black") +
+    geom_text(mapping =  aes(x = best[2] - 0.15,
+                             y = best[3] - 0.05),
+              label = paste( best[1], "(", best[2], ",", best[3], ")")) +
+    geom_text(mapping = aes(x = 0.5,
+                            y = 0.01),
+              label = paste("AUC: ", round(rocobj$auc,3)))
+}
+
+tree_func <- function(final_model, 
+                      tree_num) {
+  
+  # get tree by index
+  tree <- randomForest::getTree(final_model, 
+                                k = tree_num, 
+                                labelVar = TRUE) %>%
+    tibble::rownames_to_column() %>%
+    # make leaf split points to NA, so the 0s won't get plotted
+    mutate(`split point` = ifelse(is.na(prediction), `split point`, NA))
+  
+  # prepare data frame for graph
+  graph_frame <- data.frame(from = rep(tree$rowname, 2),
+                            to = c(tree$`left daughter`, tree$`right daughter`))
+  
+  # convert to graph and delete the last node that we don't want to plot
+  graph <- graph_from_data_frame(graph_frame) %>%
+    delete_vertices("0")
+  
+  # set node labels
+  V(graph)$node_label <- gsub("_", " ", as.character(tree$`split var`))
+  V(graph)$leaf_label <- as.character(tree$prediction)
+  V(graph)$split <- as.character(round(tree$`split point`, digits = 2))
+  
+  # plot
+  plot <- ggraph(graph, 'dendrogram') + 
+    theme_bw() +
+    geom_edge_link() +
+    geom_node_point() +
+    geom_node_text(aes(label = node_label), na.rm = TRUE, repel = TRUE) +
+    geom_node_label(aes(label = split), vjust = 2, na.rm = TRUE, fill = "white") +
+    geom_node_label(aes(label = leaf_label, fill = leaf_label), na.rm = TRUE, 
+					repel = TRUE, colour = "white", fontface = "bold", show.legend = FALSE) +
+    theme(panel.grid.minor = element_blank(),
+          panel.grid.major = element_blank(),
+          panel.background = element_blank(),
+          plot.background = element_rect(fill = "white"),
+          panel.border = element_blank(),
+          axis.line = element_blank(),
+          axis.text.x = element_blank(),
+          axis.text.y = element_blank(),
+          axis.ticks = element_blank(),
+          axis.title.x = element_blank(),
+          axis.title.y = element_blank(),
+          plot.title = element_text(size = 14))
+  
+  return(plot)
+}
+
+```
+
+# Análise Discriminante {.tabset}
+
+
+## Modelagem
+
+```{r}
+# Obs: possibilidades de modelos de AD: rda, lda, pda (acurácias iguais) e qda (pior)
+
+train.control <- caret::trainControl(method = "cv", number = 15) # Cross-validation com k=10
+
+## ADL com dados imputados
+set.seed(23)
+modeloAD1 <- caret::train(diabetes ~ ., data = train, trControl = train.control, method = "lda") 
+print(modeloAD1)
+rocAD1 <- roc(response = train$diabetes, predictor = predict(modeloAD1, train, type = "prob")[,2])
+plotaroc(rocAD1, titulo = "Curva ROC ADL (Imputados)")
+
+## ADL sem missing
+set.seed(23)
+modeloAD2 <- caret::train(diabetes ~ ., data = train_without_NAs, trControl = train.control, method = "lda") 
+print(modeloAD2)
+rocAD2 <- roc(response = train_without_NAs$diabetes, predictor = predict(modeloAD2, train_without_NAs, type = "prob")[,2])
+plotaroc(rocAD2, titulo = "Curva ROC ADL (Removidos)")
+
+## AD Flexível com dados imputados
+set.seed(23)
+modeloAD3 <- caret::train(diabetes ~ ., data = train, trControl = train.control, method = "fda") 
+print(modeloAD3)
+rocAD3 <- roc(response = train$diabetes, predictor = predict(modeloAD3, train, type = "prob")[,2])
+plotaroc(rocAD3, titulo = "Curva ROC AD Flexível (Imputados)")
+
+## AD Flexível sem missing
+set.seed(23)
+modeloAD4 <- caret::train(diabetes ~ ., data = train_without_NAs, trControl = train.control, method = "fda") 
+print(modeloAD4)
+rocAD4 <- roc(response = train_without_NAs$diabetes, predictor = predict(modeloAD4, train_without_NAs, type = "prob")[,2])
+plotaroc(rocAD4, titulo = "Curva ROC AD Flexível (Removidos)")
+
+## AD Quadrática com dados imputados 
+set.seed(23)
+modeloAD5 <- caret::train(diabetes ~ ., data = train, trControl = train.control, method = "qda") 
+print(modeloAD5)
+rocAD5 <- roc(response = train$diabetes, predictor = predict(modeloAD5, train, type = "prob")[,2])
+plotaroc(rocAD5, titulo = "Curva ROC AD Quadrática (Imputados)")
+
+## AD Quadrática sem missing
+set.seed(23)
+modeloAD6 <- caret::train(diabetes ~ ., data = train_without_NAs, trControl = train.control, method = "qda") 
+print(modeloAD6)
+rocAD6 <- roc(response = train_without_NAs$diabetes, predictor = predict(modeloAD6, train_without_NAs, type = "prob")[,2])
+plotaroc(rocAD6, titulo = "Curva ROC AD Quadrática (Removidos)")
+```
+
+
+
+## Testes
+
+```{r}
+
+## ADL com dados imputados
+rocAD1 <- roc(response = test$diabetes, predictor = predict(modeloAD1, test, type = "prob")[,2])
+plotaroc(rocAD1, titulo = "Curva ROC ADL (Imputados)")
+
+predictAD1 <- predict(modeloAD1, newdata = test)
+confusionMatrix(predictAD1, test$diabetes)
+
+
+## ADL sem missing
+rocAD2 <- roc(response = test_without_NAs$diabetes, predictor = predict(modeloAD2, test_without_NAs, type = "prob")[,2])
+plotaroc(rocAD2, titulo = "Curva ROC ADL (Removidos)")
+
+predictAD2 <- predict(modeloAD2, newdata = test_without_NAs)
+confusionMatrix(predictAD2, test_without_NAs$diabetes)
+
+
+## ADL Flexível com dados imputados
+rocAD3 <- roc(response = test$diabetes, predictor = predict(modeloAD3, test, type = "prob")[,2])
+plotaroc(rocAD3, titulo = "Curva ROC AD Flexível (Imputados)")
+
+predictAD3 <- predict(modeloAD3, newdata = test)
+confusionMatrix(predictAD3, test$diabetes)
+
+
+## ADL Flexível sem missing
+rocAD4 <- roc(response = test_without_NAs$diabetes, predictor = predict(modeloAD4, test_without_NAs, type = "prob")[,2])
+plotaroc(rocAD4, titulo = "Curva ROC AD Flexível (Removidos)")
+
+predictAD4 <- predict(modeloAD4, newdata = test_without_NAs)
+confusionMatrix(predictAD4, test_without_NAs$diabetes)
+
+
+## AD Quadrática com dados imputados
+rocAD5 <- roc(response = test$diabetes, predictor = predict(modeloAD5, test, type = "prob")[,2])
+plotaroc(rocAD5, titulo = "Curva ROC AD Quadrática (Imputados)")
+
+predictAD5 <- predict(modeloAD5, newdata = test)
+confusionMatrix(predictAD5, test$diabetes)
+
+
+## AD Quadrática sem missing
+rocAD6 <- roc(response = test_without_NAs$diabetes, predictor = predict(modeloAD6, test_without_NAs, type = "prob")[,2])
+plotaroc(rocAD6, titulo = "Curva ROC AD Quadrática (Removidos)")
+
+predictAD6 <- predict(modeloAD6, newdata = test_without_NAs)
+confusionMatrix(predictAD6, test_without_NAs$diabetes)
+
+
+```
+
+
+# Regressão Logística {.tabset}
+
+## Modelagem
+
+```{r}
+
+library(caret)
+
+train.control <- caret::trainControl(method = "cv", number = 10) # Cross-validation com k=10
+
+## Logística simples com ligação logit / dados imputados
+set.seed(23)
+modeloRL1 <- caret::train(diabetes ~ ., data = train, trControl = train.control, method = "glm", family=binomial(link = "logit"))
+print(modeloRL1)
+rocRL1 <- roc(response = train$diabetes, predictor = predict(modeloRL1, train, type = "prob")[,2])
+plotaroc(rocRL1)
+
+## Logística simples com ligação logit / dados sem missing
+set.seed(23)
+modeloRL2 <- caret::train(diabetes ~ ., data = train_without_NAs, trControl = train.control, method = "glm", family=binomial(link = "logit"))
+print(modeloRL2)
+rocRL2 <- roc(response = train_without_NAs$diabetes, predictor = predict(modeloRL2, train_without_NAs, type = "prob")[,2])
+plotaroc(rocRL2)
+
+## Logística regularizada / dados imputados
+set.seed(23)
+modeloRL3 <- caret::train(diabetes ~ ., data = train, trControl = train.control, method = "regLogistic")
+print(modeloRL3)
+rocRL3 <- roc(response = train$diabetes, predictor = predict(modeloRL3, train, type = "prob")[,2])
+plotaroc(rocRL3)
+
+## Logística regularizada / dados sem missing
+set.seed(23)
+modeloRL4 <- caret::train(diabetes ~ ., data = train_without_NAs, trControl = train.control, method = "regLogistic")
+print(modeloRL4)
+rocRL4 <- roc(response = train_without_NAs$diabetes, predictor = predict(modeloRL4, train_without_NAs, type = "prob")[,2])
+plotaroc(rocRL4)
+
+```
+
+
+## Teste
+
+
+```{r}
+## Regressão Logística Simples com dados imputados
+rocRL1 <- roc(response = test$diabetes, predictor = predict(modeloRL1, test, type = "prob")[,2])
+plotaroc(rocRL1, titulo = "Curva ROC RL Simples (Imputados)")
+
+predictRL1 <- predict(modeloRL1, newdata = test)
+confusionMatrix(predictRL1, test$diabetes)
+
+
+## Regressão Logística Simples sem missing
+rocRL2 <- roc(response = test_without_NAs$diabetes, predictor = predict(modeloRL2, test_without_NAs, type = "prob")[,2])
+plotaroc(rocRL2, titulo = "Curva ROC RL Simples (Removidos)")
+
+predictRL2 <- predict(modeloRL2, newdata = test_without_NAs)
+confusionMatrix(predictRL2, test_without_NAs$diabetes)
+
+
+## Regressão Logística Regularizada com dados imputados
+rocRL3 <- roc(response = test$diabetes, predictor = predict(modeloRL3, test, type = "prob")[,2])
+plotaroc(rocRL3, titulo = "Curva ROC RL Regularizada (Imputados)")
+
+predictRL3 <- predict(modeloRL3, newdata = test)
+confusionMatrix(predictRL3, test$diabetes)
+
+
+## Regressão Logística Regularizada sem missing
+rocRL4 <- roc(response = test_without_NAs$diabetes, predictor = predict(modeloRL4, test_without_NAs, type = "prob")[,2])
+plotaroc(rocRL4, titulo = "Curva ROC RL Regularizada (Removidos)")
+
+predictRL4 <- predict(modeloRL4, newdata = test_without_NAs)
+confusionMatrix(predictRL4, test_without_NAs$diabetes)
+
+
+```
+
+# Random Forest {.tabset}
+
+## Modelagem
+
+```{r}
+
+library(caret)
+
+train.control <- caret::trainControl(method = "cv", number = 10) # Cross-validation com k=10
+
+## Random Forest / dados imputados
+set.seed(23)
+
+modeloRF1 <- train(diabetes~.,
+    train,
+    method = "rf",
+    metric = "Accuracy",
+    tuneGrid = tuneGrid,
+    trControl = train.control,
+    importance = TRUE,
+    ntree = 1000)
+
+print(modeloRF1)
+rocRF1 <- roc(response = train$diabetes, predictor = predict(modeloRF1, train, type = "prob")[,2])
+plotaroc(rocRF1)
+
+
+## Random Forest / sem missing
+set.seed(23)
+
+modeloRF2 <- train(diabetes~.,
+    train_without_NAs,
+    method = "rf",
+    metric = "Accuracy",
+    tuneGrid = tuneGrid,
+    trControl = train.control,
+    importance = TRUE,
+    ntree = 1000)
+
+print(modeloRF2)
+rocRF2 <- roc(response = train_without_NAs$diabetes, predictor = predict(modeloRF1, train_without_NAs, type = "prob")[,2])
+plotaroc(rocRF2)
+
+```
+
+## Árvores de decisão geradas
+```{r}
+tree_num <- which(modeloRF1$finalModel$forest$ndbigtree == min(modeloRF1$finalModel$forest$ndbigtree))
+print(paste("Menor árvore com imputação",tree_num))
+tree_func(final_model = modeloRF1$finalModel, tree_num[1])
+
+tree_num <- which(modeloRF2$finalModel$forest$ndbigtree == min(modeloRF2$finalModel$forest$ndbigtree))
+print(paste("Menor árvore sem imputação:",tree_num))
+tree_func(final_model = modeloRF2$finalModel, tree_num[1])
+```
+
+## Teste
+```{r}
+
+## Random Forest com dados imputados
+rocRF1 <- roc(response = test$diabetes, predictor = predict(modeloRF1, test, type = "prob")[,2])
+plotaroc(rocRF1, titulo = "Curva ROC Random Forest (Imputados)")
+
+predictRF1 <- predict(modeloRF1, newdata = test)
+print("Dados imputados:")
+confusionMatrix(predictRF1, test$diabetes)
+
+## Random Forest com dados imputados
+rocRF2 <- roc(response = test_without_NAs$diabetes, predictor = predict(modeloRF2, test_without_NAs, type = "prob")[,2])
+plotaroc(rocRF2, titulo = "Curva ROC Random Forest (sem Missing)")
+
+predictRF2 <- predict(modeloRF2, newdata = test_without_NAs)
+print("Sem Missing:")
+confusionMatrix(predictRF2, test_without_NAs$diabetes)
+```
+
