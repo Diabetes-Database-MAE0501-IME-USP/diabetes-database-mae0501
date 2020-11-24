@@ -659,7 +659,10 @@ confusionMatrix(predictRF2, test_without_NAs$diabetes)
 ```
 
 
-# Suporte Vector Machine {.tabset}
+# Support Vector Machine {.tabset}
+
+
+Support Vector Machine (SVM) estabelece um limite de decisão ideal que separa os pontos de dados de diferentes classes e, em seguida, prevê a classe de novas observações com base nesse limite de separação. Os diferentes grupos podem ser separáveis por uma linha reta linear ou por uma linha limite não linear.
 
 ## Modelagem
 

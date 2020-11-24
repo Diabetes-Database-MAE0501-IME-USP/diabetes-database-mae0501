@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex 2020.11.5)  24 NOV 2020 19:31
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex 2020.11.5)  24 NOV 2020 19:58
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2347,23 +2347,32 @@ Package xcolor Warning: Incompatible color definition on input line 2258.
 Package xcolor Warning: Incompatible color definition on input line 2258.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2297.
+Package xcolor Warning: Incompatible color definition on input line 2303.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2312.
+Package xcolor Warning: Incompatible color definition on input line 2318.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2312.
+Package xcolor Warning: Incompatible color definition on input line 2318.
+
+
+Package xcolor Warning: Incompatible color definition on input line 2318.
 
 [51]
 
-Package xcolor Warning: Incompatible color definition on input line 2342.
+Package xcolor Warning: Incompatible color definition on input line 2318.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2346.
+Package xcolor Warning: Incompatible color definition on input line 2318.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2346.
+Package xcolor Warning: Incompatible color definition on input line 2348.
+
+
+Package xcolor Warning: Incompatible color definition on input line 2352.
+
+
+Package xcolor Warning: Incompatible color definition on input line 2352.
 
 <aprendizagem_estatistica_diabetes_files/figure-latex/unnamed-chunk-12-1.pdf, i
 d=583, 469.755pt x 325.215pt>
@@ -2372,31 +2381,31 @@ df Graphic file (type pdf)
 <use aprendizagem_estatistica_diabetes_files/figure-latex/unnamed-chunk-12-1.pd
 f>
 Package pdftex.def Info: aprendizagem_estatistica_diabetes_files/figure-latex/u
-nnamed-chunk-12-1.pdf  used on input line 2348.
+nnamed-chunk-12-1.pdf  used on input line 2354.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
-Overfull \hbox (39.99884pt too wide) in paragraph at lines 2348--2349
+Overfull \hbox (39.99884pt too wide) in paragraph at lines 2354--2355
 [][] 
  []
 
 
-Package xcolor Warning: Incompatible color definition on input line 2350.
+Package xcolor Warning: Incompatible color definition on input line 2356.
 
 [52]
 
-Package xcolor Warning: Incompatible color definition on input line 2354.
+Package xcolor Warning: Incompatible color definition on input line 2360.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2354.
+Package xcolor Warning: Incompatible color definition on input line 2360.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2364.
+Package xcolor Warning: Incompatible color definition on input line 2370.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2368.
+Package xcolor Warning: Incompatible color definition on input line 2374.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2368.
+Package xcolor Warning: Incompatible color definition on input line 2374.
 
 <aprendizagem_estatistica_diabetes_files/figure-latex/unnamed-chunk-12-2.pdf, i
 d=588, 469.755pt x 325.215pt>
@@ -2405,34 +2414,34 @@ df Graphic file (type pdf)
 <use aprendizagem_estatistica_diabetes_files/figure-latex/unnamed-chunk-12-2.pd
 f>
 Package pdftex.def Info: aprendizagem_estatistica_diabetes_files/figure-latex/u
-nnamed-chunk-12-2.pdf  used on input line 2370.
+nnamed-chunk-12-2.pdf  used on input line 2376.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
-Overfull \hbox (39.99884pt too wide) in paragraph at lines 2370--2371
+Overfull \hbox (39.99884pt too wide) in paragraph at lines 2376--2377
 [][] 
  []
 
 [53 <./aprendizagem_estatistica_diabetes_files/figure-latex/unnamed-chunk-12-1.
 pdf>]
 
-Package xcolor Warning: Incompatible color definition on input line 2375.
+Package xcolor Warning: Incompatible color definition on input line 2381.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2387.
+Package xcolor Warning: Incompatible color definition on input line 2393.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2387.
+Package xcolor Warning: Incompatible color definition on input line 2393.
 
 [54 <./aprendizagem_estatistica_diabetes_files/figure-latex/unnamed-chunk-12-2.
 pdf>]
 
-Package xcolor Warning: Incompatible color definition on input line 2417.
+Package xcolor Warning: Incompatible color definition on input line 2423.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2421.
+Package xcolor Warning: Incompatible color definition on input line 2427.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2421.
+Package xcolor Warning: Incompatible color definition on input line 2427.
 
 <aprendizagem_estatistica_diabetes_files/figure-latex/unnamed-chunk-13-1.pdf, i
 d=612, 469.755pt x 325.215pt>
@@ -2441,32 +2450,32 @@ df Graphic file (type pdf)
 <use aprendizagem_estatistica_diabetes_files/figure-latex/unnamed-chunk-13-1.pd
 f>
 Package pdftex.def Info: aprendizagem_estatistica_diabetes_files/figure-latex/u
-nnamed-chunk-13-1.pdf  used on input line 2423.
+nnamed-chunk-13-1.pdf  used on input line 2429.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
-Overfull \hbox (39.99884pt too wide) in paragraph at lines 2423--2424
+Overfull \hbox (39.99884pt too wide) in paragraph at lines 2429--2430
 [][] 
  []
 
 
-Package xcolor Warning: Incompatible color definition on input line 2425.
+Package xcolor Warning: Incompatible color definition on input line 2431.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2429.
+Package xcolor Warning: Incompatible color definition on input line 2435.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2429.
+Package xcolor Warning: Incompatible color definition on input line 2435.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2439.
+Package xcolor Warning: Incompatible color definition on input line 2445.
 
 [55 <./aprendizagem_estatistica_diabetes_files/figure-latex/unnamed-chunk-13-1.
 pdf>]
 
-Package xcolor Warning: Incompatible color definition on input line 2443.
+Package xcolor Warning: Incompatible color definition on input line 2449.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2443.
+Package xcolor Warning: Incompatible color definition on input line 2449.
 
 <aprendizagem_estatistica_diabetes_files/figure-latex/unnamed-chunk-13-2.pdf, i
 d=624, 469.755pt x 325.215pt>
@@ -2475,33 +2484,33 @@ df Graphic file (type pdf)
 <use aprendizagem_estatistica_diabetes_files/figure-latex/unnamed-chunk-13-2.pd
 f>
 Package pdftex.def Info: aprendizagem_estatistica_diabetes_files/figure-latex/u
-nnamed-chunk-13-2.pdf  used on input line 2445.
+nnamed-chunk-13-2.pdf  used on input line 2451.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
-Overfull \hbox (39.99884pt too wide) in paragraph at lines 2445--2446
+Overfull \hbox (39.99884pt too wide) in paragraph at lines 2451--2452
 [][] 
  []
 
 
-Package xcolor Warning: Incompatible color definition on input line 2450.
+Package xcolor Warning: Incompatible color definition on input line 2456.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2462.
+Package xcolor Warning: Incompatible color definition on input line 2468.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2462.
+Package xcolor Warning: Incompatible color definition on input line 2468.
 
 [56 <./aprendizagem_estatistica_diabetes_files/figure-latex/unnamed-chunk-13-2.
 pdf>] [57]
 
-Package xcolor Warning: Incompatible color definition on input line 2582.
+Package xcolor Warning: Incompatible color definition on input line 2588.
 
 [58]
 
-Package xcolor Warning: Incompatible color definition on input line 2586.
+Package xcolor Warning: Incompatible color definition on input line 2592.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2586.
+Package xcolor Warning: Incompatible color definition on input line 2592.
 
 <aprendizagem_estatistica_diabetes_files/figure-latex/unnamed-chunk-14-1.pdf, i
 d=646, 469.755pt x 325.215pt>
@@ -2510,30 +2519,30 @@ df Graphic file (type pdf)
 <use aprendizagem_estatistica_diabetes_files/figure-latex/unnamed-chunk-14-1.pd
 f>
 Package pdftex.def Info: aprendizagem_estatistica_diabetes_files/figure-latex/u
-nnamed-chunk-14-1.pdf  used on input line 2588.
+nnamed-chunk-14-1.pdf  used on input line 2594.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
-Overfull \hbox (39.99884pt too wide) in paragraph at lines 2588--2589
+Overfull \hbox (39.99884pt too wide) in paragraph at lines 2594--2595
 [][] 
  []
 
 
-Package xcolor Warning: Incompatible color definition on input line 2590.
+Package xcolor Warning: Incompatible color definition on input line 2596.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2594.
+Package xcolor Warning: Incompatible color definition on input line 2600.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2594.
+Package xcolor Warning: Incompatible color definition on input line 2600.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2604.
+Package xcolor Warning: Incompatible color definition on input line 2610.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2608.
+Package xcolor Warning: Incompatible color definition on input line 2614.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2608.
+Package xcolor Warning: Incompatible color definition on input line 2614.
 
 <aprendizagem_estatistica_diabetes_files/figure-latex/unnamed-chunk-14-2.pdf, i
 d=647, 469.755pt x 325.215pt>
@@ -2542,34 +2551,34 @@ df Graphic file (type pdf)
 <use aprendizagem_estatistica_diabetes_files/figure-latex/unnamed-chunk-14-2.pd
 f>
 Package pdftex.def Info: aprendizagem_estatistica_diabetes_files/figure-latex/u
-nnamed-chunk-14-2.pdf  used on input line 2610.
+nnamed-chunk-14-2.pdf  used on input line 2616.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
-Overfull \hbox (39.99884pt too wide) in paragraph at lines 2610--2611
+Overfull \hbox (39.99884pt too wide) in paragraph at lines 2616--2617
 [][] 
  []
 
 [59 <./aprendizagem_estatistica_diabetes_files/figure-latex/unnamed-chunk-14-1.
 pdf>]
 
-Package xcolor Warning: Incompatible color definition on input line 2615.
+Package xcolor Warning: Incompatible color definition on input line 2621.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2627.
+Package xcolor Warning: Incompatible color definition on input line 2633.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2627.
+Package xcolor Warning: Incompatible color definition on input line 2633.
 
 [60 <./aprendizagem_estatistica_diabetes_files/figure-latex/unnamed-chunk-14-2.
 pdf>] [61]
 
-Package xcolor Warning: Incompatible color definition on input line 2747.
+Package xcolor Warning: Incompatible color definition on input line 2753.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2751.
+Package xcolor Warning: Incompatible color definition on input line 2757.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2751.
+Package xcolor Warning: Incompatible color definition on input line 2757.
 
 <aprendizagem_estatistica_diabetes_files/figure-latex/unnamed-chunk-15-1.pdf, i
 d=676, 469.755pt x 325.215pt>
@@ -2578,31 +2587,31 @@ df Graphic file (type pdf)
 <use aprendizagem_estatistica_diabetes_files/figure-latex/unnamed-chunk-15-1.pd
 f>
 Package pdftex.def Info: aprendizagem_estatistica_diabetes_files/figure-latex/u
-nnamed-chunk-15-1.pdf  used on input line 2753.
+nnamed-chunk-15-1.pdf  used on input line 2759.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
-Overfull \hbox (39.99884pt too wide) in paragraph at lines 2753--2754
+Overfull \hbox (39.99884pt too wide) in paragraph at lines 2759--2760
 [][] 
  []
 
 
-Package xcolor Warning: Incompatible color definition on input line 2755.
+Package xcolor Warning: Incompatible color definition on input line 2761.
 
 [62]
 
-Package xcolor Warning: Incompatible color definition on input line 2759.
+Package xcolor Warning: Incompatible color definition on input line 2765.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2759.
+Package xcolor Warning: Incompatible color definition on input line 2765.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2769.
+Package xcolor Warning: Incompatible color definition on input line 2775.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2773.
+Package xcolor Warning: Incompatible color definition on input line 2779.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2773.
+Package xcolor Warning: Incompatible color definition on input line 2779.
 
 <aprendizagem_estatistica_diabetes_files/figure-latex/unnamed-chunk-15-2.pdf, i
 d=681, 469.755pt x 325.215pt>
@@ -2611,32 +2620,32 @@ df Graphic file (type pdf)
 <use aprendizagem_estatistica_diabetes_files/figure-latex/unnamed-chunk-15-2.pd
 f>
 Package pdftex.def Info: aprendizagem_estatistica_diabetes_files/figure-latex/u
-nnamed-chunk-15-2.pdf  used on input line 2775.
+nnamed-chunk-15-2.pdf  used on input line 2781.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
-Overfull \hbox (39.99884pt too wide) in paragraph at lines 2775--2776
+Overfull \hbox (39.99884pt too wide) in paragraph at lines 2781--2782
 [][] 
  []
 
 [63 <./aprendizagem_estatistica_diabetes_files/figure-latex/unnamed-chunk-15-1.
 pdf>]
 
-Package xcolor Warning: Incompatible color definition on input line 2779.
+Package xcolor Warning: Incompatible color definition on input line 2785.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2784.
+Package xcolor Warning: Incompatible color definition on input line 2790.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2784.
+Package xcolor Warning: Incompatible color definition on input line 2790.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2794.
+Package xcolor Warning: Incompatible color definition on input line 2800.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2798.
+Package xcolor Warning: Incompatible color definition on input line 2804.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2798.
+Package xcolor Warning: Incompatible color definition on input line 2804.
 
 <aprendizagem_estatistica_diabetes_files/figure-latex/unnamed-chunk-16-1.pdf, i
 d=693, 469.755pt x 325.215pt>
@@ -2645,43 +2654,43 @@ df Graphic file (type pdf)
 <use aprendizagem_estatistica_diabetes_files/figure-latex/unnamed-chunk-16-1.pd
 f>
 Package pdftex.def Info: aprendizagem_estatistica_diabetes_files/figure-latex/u
-nnamed-chunk-16-1.pdf  used on input line 2800.
+nnamed-chunk-16-1.pdf  used on input line 2806.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
-Overfull \hbox (39.99884pt too wide) in paragraph at lines 2800--2801
+Overfull \hbox (39.99884pt too wide) in paragraph at lines 2806--2807
 [][] 
  []
 
 
-Package xcolor Warning: Incompatible color definition on input line 2802.
+Package xcolor Warning: Incompatible color definition on input line 2808.
 
 [64 <./aprendizagem_estatistica_diabetes_files/figure-latex/unnamed-chunk-15-2.
 pdf>]
 
-Package xcolor Warning: Incompatible color definition on input line 2807.
+Package xcolor Warning: Incompatible color definition on input line 2813.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2807.
+Package xcolor Warning: Incompatible color definition on input line 2813.
 
 [65 <./aprendizagem_estatistica_diabetes_files/figure-latex/unnamed-chunk-16-1.
 pdf>]
 
-Package xcolor Warning: Incompatible color definition on input line 2839.
+Package xcolor Warning: Incompatible color definition on input line 2845.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2844.
+Package xcolor Warning: Incompatible color definition on input line 2850.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2844.
+Package xcolor Warning: Incompatible color definition on input line 2850.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2851.
+Package xcolor Warning: Incompatible color definition on input line 2857.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2855.
+Package xcolor Warning: Incompatible color definition on input line 2861.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2855.
+Package xcolor Warning: Incompatible color definition on input line 2861.
 
 <aprendizagem_estatistica_diabetes_files/figure-latex/unnamed-chunk-16-2.pdf, i
 d=718, 469.755pt x 325.215pt>
@@ -2690,41 +2699,41 @@ df Graphic file (type pdf)
 <use aprendizagem_estatistica_diabetes_files/figure-latex/unnamed-chunk-16-2.pd
 f>
 Package pdftex.def Info: aprendizagem_estatistica_diabetes_files/figure-latex/u
-nnamed-chunk-16-2.pdf  used on input line 2857.
+nnamed-chunk-16-2.pdf  used on input line 2863.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
-Overfull \hbox (39.99884pt too wide) in paragraph at lines 2857--2858
+Overfull \hbox (39.99884pt too wide) in paragraph at lines 2863--2864
 [][] 
  []
 
 
-Package xcolor Warning: Incompatible color definition on input line 2859.
+Package xcolor Warning: Incompatible color definition on input line 2865.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2864.
+Package xcolor Warning: Incompatible color definition on input line 2870.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2864.
+Package xcolor Warning: Incompatible color definition on input line 2870.
 
 [66 <./aprendizagem_estatistica_diabetes_files/figure-latex/unnamed-chunk-16-2.
 pdf>]
 
-Package xcolor Warning: Incompatible color definition on input line 2896.
+Package xcolor Warning: Incompatible color definition on input line 2902.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2901.
+Package xcolor Warning: Incompatible color definition on input line 2907.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2901.
+Package xcolor Warning: Incompatible color definition on input line 2907.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2908.
+Package xcolor Warning: Incompatible color definition on input line 2914.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2912.
+Package xcolor Warning: Incompatible color definition on input line 2918.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2912.
+Package xcolor Warning: Incompatible color definition on input line 2918.
 
 <aprendizagem_estatistica_diabetes_files/figure-latex/unnamed-chunk-16-3.pdf, i
 d=731, 469.755pt x 325.215pt>
@@ -2733,42 +2742,42 @@ df Graphic file (type pdf)
 <use aprendizagem_estatistica_diabetes_files/figure-latex/unnamed-chunk-16-3.pd
 f>
 Package pdftex.def Info: aprendizagem_estatistica_diabetes_files/figure-latex/u
-nnamed-chunk-16-3.pdf  used on input line 2914.
+nnamed-chunk-16-3.pdf  used on input line 2920.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
-Overfull \hbox (39.99884pt too wide) in paragraph at lines 2914--2915
+Overfull \hbox (39.99884pt too wide) in paragraph at lines 2920--2921
 [][] 
  []
 
 
-Package xcolor Warning: Incompatible color definition on input line 2916.
+Package xcolor Warning: Incompatible color definition on input line 2922.
 
 [67]
 
-Package xcolor Warning: Incompatible color definition on input line 2921.
+Package xcolor Warning: Incompatible color definition on input line 2927.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2921.
+Package xcolor Warning: Incompatible color definition on input line 2927.
 
 [68 <./aprendizagem_estatistica_diabetes_files/figure-latex/unnamed-chunk-16-3.
 pdf>]
 
-Package xcolor Warning: Incompatible color definition on input line 2953.
+Package xcolor Warning: Incompatible color definition on input line 2959.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2958.
+Package xcolor Warning: Incompatible color definition on input line 2964.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2958.
+Package xcolor Warning: Incompatible color definition on input line 2964.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2965.
+Package xcolor Warning: Incompatible color definition on input line 2971.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2969.
+Package xcolor Warning: Incompatible color definition on input line 2975.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2969.
+Package xcolor Warning: Incompatible color definition on input line 2975.
 
 <aprendizagem_estatistica_diabetes_files/figure-latex/unnamed-chunk-16-4.pdf, i
 d=749, 469.755pt x 325.215pt>
@@ -2777,27 +2786,27 @@ df Graphic file (type pdf)
 <use aprendizagem_estatistica_diabetes_files/figure-latex/unnamed-chunk-16-4.pd
 f>
 Package pdftex.def Info: aprendizagem_estatistica_diabetes_files/figure-latex/u
-nnamed-chunk-16-4.pdf  used on input line 2971.
+nnamed-chunk-16-4.pdf  used on input line 2977.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
-Overfull \hbox (39.99884pt too wide) in paragraph at lines 2971--2972
+Overfull \hbox (39.99884pt too wide) in paragraph at lines 2977--2978
 [][] 
  []
 
 
-Package xcolor Warning: Incompatible color definition on input line 2973.
+Package xcolor Warning: Incompatible color definition on input line 2979.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2978.
+Package xcolor Warning: Incompatible color definition on input line 2984.
 
 
-Package xcolor Warning: Incompatible color definition on input line 2978.
+Package xcolor Warning: Incompatible color definition on input line 2984.
 
 [69 <./aprendizagem_estatistica_diabetes_files/figure-latex/unnamed-chunk-16-4.
 pdf>] [70] (./aprendizagem_estatistica_diabetes.aux)
 Package rerunfilecheck Info: File `aprendizagem_estatistica_diabetes.out' has n
 ot changed.
-(rerunfilecheck)             Checksum: 8A3878E37FC6BE40702BD1F585E6D13F;1785.
+(rerunfilecheck)             Checksum: EB5D1A1BD099896C27E01DC82AD00AF5;1785.
  ) 
 Here is how much of TeX's memory you used:
  16432 strings out of 481446
@@ -2835,7 +2844,7 @@ e1/public/lm/lmr8.pfb><c:/Users/Rodrigo Araujo/AppData/Roaming/TinyTeX/texmf-di
 st/fonts/type1/public/lm/lmtk10.pfb><c:/Users/Rodrigo Araujo/AppData/Roaming/Ti
 nyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb><c:/Users/Rodrigo Araujo/AppD
 ata/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtti10.pfb>
-Output written on aprendizagem_estatistica_diabetes.pdf (70 pages, 1594046 byte
+Output written on aprendizagem_estatistica_diabetes.pdf (70 pages, 1595982 byte
 s).
 PDF statistics:
  825 PDF objects out of 1000 (max. 8388607)
