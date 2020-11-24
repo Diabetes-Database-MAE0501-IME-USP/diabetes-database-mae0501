@@ -100,6 +100,35 @@ knitr::opts_template$set(
 ```
 
 
+
+```{r func_aux, include=FALSE}
+# Funções auxliares ----
+
+kable <- function(...) {
+  args <- list(
+    ...,
+    {if(!interactive() & knitr::is_latex_output()) format = 'latex'},
+    digits = 2,
+    booktabs = TRUE,
+    format.args = list(
+      # scientific=T,
+      # nsmall = 2,
+      decimal.mark = ",", 
+      big.mark = "."
+      )
+    )
+  
+  args <- args[!duplicated(names(args))]
+  
+  do.call(knitr::kable, args) %>% kable_styling(latex_options = "HOLD_position")
+}
+
+
+
+```
+
+
+
 # Preparar dados e subconjuntos de treino e teste (omitir essa parte - é só pra obter os dados para os modelos)
 
 ```{r include=FALSE}
@@ -114,6 +143,9 @@ library(caret)
 
 #setwd("~/diabetes-database-mae0501/")
 diabetes <- read_csv("diabetes.csv")
+
+head(diabetes) %>% kable(caption="Dados.")
+
 colnames(diabetes)[9] <- "diabetes"
 diabetes$diabetes <- as.factor(diabetes$diabetes)
 levels(diabetes$diabetes) <- c("No","Yes")
@@ -612,6 +644,7 @@ confusionMatrix(predictRF2, test_without_NAs$diabetes)
 
 ## Modelagem
 
+### SVM Kernel Linear com dados imputados
 ```{r, warning=FALSE}
 
 library(caret)
@@ -625,13 +658,13 @@ modeloSVM1 <- caret::train(
 )
 print(modeloSVM1)
 plot(modeloSVM1, main="SVM Kernel Linear - Acurácia vs Valores de Cost (Imputados)")
-```
 
-```{r, warning=FALSE}
 rocSVM1 <- roc(response = train$diabetes, predictor = predict(modeloSVM1, train, type = "prob")[,2])
-plotaroc(rocSVM1, "Curva ROC SVM Kernel Linear (Imputados)")
+plotaroc(rocSVM1, titulo = "Curva ROC SVM Kernel Linear (Imputados)")
 
 ```
+
+### SVM Kernel Linear sem missing
 
 ```{r, warning=FALSE}
 ## SVM Kernel Linear sem missing
@@ -645,11 +678,12 @@ modeloSVM2 <- caret::train(
 print(modeloSVM2)
 plot(modeloSVM2, main="SVM Kernel Linear - Acurácia vs Valores de Cost (Removidos)")
 rocSVM2 <- roc(response = train_without_NAs$diabetes, predictor = predict(modeloSVM2, train_without_NAs, type = "prob")[,2])
-plotaroc(rocSVM2, "Curva ROC SVM Kernel Linear (Removidos)")
+plotaroc(rocSVM2, titulo ="Curva ROC SVM Kernel Linear (Removidos)")
 
 
 ```
 
+### SVM Kernel Não Linear com dados imputados
 ```{r, warning=FALSE}
 
 ## SVM Kernel Não Linear com dados imputados
@@ -663,9 +697,11 @@ modeloSVM3 <- caret::train(
 print(modeloSVM3)
 plot(modeloSVM3, main="SVM Kernel não Linear - Acurácia vs Valores de Cost (Imputados)")
 rocSVM3 <- roc(response = train$diabetes, predictor = predict(modeloSVM3, train, type = "prob")[,2])
-plotaroc(rocSVM3, "Curva ROC SVM Kernel não Linear (Imputados)")
+plotaroc(rocSVM3, titulo ="Curva ROC SVM Kernel não Linear (Imputados)")
 
 ```
+
+### SVM Kernel Não Linear sem missing
 
 ```{r, warning=FALSE}
 
@@ -680,7 +716,7 @@ modeloSVM4 <- caret::train(
 print(modeloSVM4)
 plot(modeloSVM4, main="SVM Kernel não Linear - Acurácia vs Valores de Cost (Removidos)")
 rocSVM4 <- roc(response = train_without_NAs$diabetes, predictor = predict(modeloSVM4, train_without_NAs, type = "prob")[,2])
-plotaroc(rocSVM4, "Curva ROC SVM Kernel não Linear (Removidos)")
+plotaroc(rocSVM4, titulo ="Curva ROC SVM Kernel não Linear (Removidos)")
 
 
 ```
