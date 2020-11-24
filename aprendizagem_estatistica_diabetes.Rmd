@@ -144,8 +144,6 @@ library(caret)
 #setwd("~/diabetes-database-mae0501/")
 diabetes <- read_csv("diabetes.csv")
 
-head(diabetes) %>% kable(caption="Dados.")
-
 colnames(diabetes)[9] <- "diabetes"
 diabetes$diabetes <- as.factor(diabetes$diabetes)
 levels(diabetes$diabetes) <- c("No","Yes")
@@ -647,11 +645,15 @@ confusionMatrix(predictRF2, test_without_NAs$diabetes)
 ### SVM Kernel Linear com dados imputados
 ```{r, warning=FALSE}
 
-library(caret)
+train.control <- caret::trainControl(method = "cv", number = 10, savePred=T, classProb=T) # Cross-validation 
+#library(e1071) #SVM
+library(caret) #select tuning parameters
 ## SVM Kernel Linear com dados imputados
 set.seed(23)
+
 modeloSVM1 <- caret::train(
   diabetes ~., data = train, method = "svmLinear",
+  probability = T,
   trControl = train.control,
   preProcess = c("center","scale"), 
   tuneGrid = expand.grid(C = seq(0.01, 10, length = 10))
