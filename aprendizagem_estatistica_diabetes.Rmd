@@ -58,6 +58,7 @@ editor_options:
 <!--   \addcontentsline{toc}{subsection}{\protect\numberline{\thesection}#1}% -->
 <!--   \sectionmark{#1}} -->
 
+
 ```{r setup, include=FALSE}
 # options(tinytex.verbose = TRUE)
 
@@ -100,9 +101,7 @@ knitr::opts_template$set(
 ```
 
 
-
 ```{r func_aux, include=FALSE}
-# Funções auxliares ----
 
 kable <- function(...) {
   args <- list(
@@ -128,20 +127,34 @@ kable <- function(...) {
 ```
 
 
-
-# Preparar dados e subconjuntos de treino e teste (omitir essa parte - é só pra obter os dados para os modelos)
-
-```{r include=FALSE}
+```{r libs, include=FALSE}
+library(tidyverse)
+library(knitr)
+library(stargazer)
+library(tidyverse)
+library(kableExtra)
+library(ggplot2)
+library(readxl)
+library(MASS)
+library(psych)
+library(Hmisc)
+library(GPArotation)
 
 library(readr)
 library(dplyr)
-#library(visdat)
-#library(VIM)
-#library(ggplo2)
-#library(naniar)
+library(visdat)
+library(VIM)
 library(caret)
 
-#setwd("~/diabetes-database-mae0501/")
+
+
+```
+
+
+# Leitura dos Dados
+
+```{r}
+
 diabetes <- read_csv("diabetes.csv")
 
 colnames(diabetes)[9] <- "diabetes"
@@ -150,6 +163,14 @@ levels(diabetes$diabetes) <- c("No","Yes")
 
 # Missings
 diabetes[, 2:6][diabetes[, 2:6] == 0] <- NA
+
+head(diabetes) %>% kable(caption="Dados.")
+
+```
+
+```{r include=FALSE}
+
+# Preparar dados e subconjuntos de treino e teste (omitir essa parte - é só pra obter os dados para os modelos)
 
 # Suconjuntos de treino, teste e teste fora da amostra
 set.seed(23) 
@@ -647,10 +668,8 @@ confusionMatrix(predictRF2, test_without_NAs$diabetes)
 
 train.control <- caret::trainControl(method = "cv", number = 10, savePred=T, classProb=T) # Cross-validation 
 #library(e1071) #SVM
-library(caret) #select tuning parameters
 ## SVM Kernel Linear com dados imputados
 set.seed(23)
-
 modeloSVM1 <- caret::train(
   diabetes ~., data = train, method = "svmLinear",
   probability = T,
@@ -697,7 +716,7 @@ modeloSVM3 <- caret::train(
   tuneGrid = expand.grid(sigma = seq(0.01, 1, length = 10) , C = seq(1, 10, length = 10))
 )
 print(modeloSVM3)
-plot(modeloSVM3, main="SVM Kernel não Linear - Acurácia vs Valores de Cost (Imputados)")
+plot(modeloSVM3, main="SVM Kernel não Linear - Acurácia vs Valores de Sigma (Imputados)")
 rocSVM3 <- roc(response = train$diabetes, predictor = predict(modeloSVM3, train, type = "prob")[,2])
 plotaroc(rocSVM3, titulo ="Curva ROC SVM Kernel não Linear (Imputados)")
 
@@ -716,7 +735,7 @@ modeloSVM4 <- caret::train(
   tuneGrid = expand.grid(sigma = seq(0.01, 1, length = 10) , C = seq(1, 10, length = 10))
 )
 print(modeloSVM4)
-plot(modeloSVM4, main="SVM Kernel não Linear - Acurácia vs Valores de Cost (Removidos)")
+plot(modeloSVM4, main="SVM Kernel não Linear - Acurácia vs Valores de Sigma (Removidos)")
 rocSVM4 <- roc(response = train_without_NAs$diabetes, predictor = predict(modeloSVM4, train_without_NAs, type = "prob")[,2])
 plotaroc(rocSVM4, titulo ="Curva ROC SVM Kernel não Linear (Removidos)")
 
