@@ -1,18 +1,104 @@
 ---
-title: "Descritiva, AD e Logística"
-author: "Rodrigo A. Nakahara"
-date: "23/11/2020"
-output: html_document
+title: "Aprendizagem Estatística em Altas Dimensões [MAE0501/MAE5904/IBI5904]"
+author: |
+  | Ícaro Maia Santos de Castro\thanks{Número USP: 11866921}
+  | Rayssa de Carvalho Roberto\thanks{Número USP: 10940828}
+  | Rodrigo Aoyama Nakahara\thanks{Número USP: 3510922} 
+  | Rodrigo Araujo\thanks{Número USP: 9299208}
+  | Vitor Hugo Vieira de Lima\thanks{Número USP: 10263886}
+date: "`r stringr::str_to_sentence(format(Sys.time(), '%B de %Y'))`"
+lang: pt-BR
+header-includes:
+  # - \usepackage[brazilian]{babel}
+  - \usepackage{float}
+  - \usepackage{amsmath}
+  - \usepackage{amsthm}
+  - \floatplacement{figure}{H}
+  - \usepackage{indentfirst}
+  - \setlength{\parindent}{4em}
+  - \setlength{\parskip}{1em}
+  - \usepackage{booktabs}
+  - \usepackage{dcolumn}
+  - \usepackage{bm}
+  - \usepackage{titling}
+  - \thanksmarkseries{arabic} % \thanks footnotes com numeros
+  - \usepackage[bottom]{footmisc} % corrige posição footnotes
+  - \usepackage{pdfpages}
+  - \usepackage{tocloft}
+  - \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+  - \usepackage{amssymb}
+  - \renewcommand\qedsymbol{$\blacksquare$}
+  - \usepackage{cleveref}
+output: 
+  pdf_document: 
+    fig_caption: yes
+    # number_sections: yes
+    toc: true
+    toc_depth: 2
+#keep_tex: true
+editor_options: 
+  chunk_output_type: console
+# bibliography: ref.bib
 ---
+  
+\pagebreak
 
+\newcommand\invisiblesection[1]{%
+  \refstepcounter{section}%
+  \addcontentsline{toc}{section}{#1}%
+  \sectionmark{#1}}
+  
+<!-- \newcommand\invisiblesection[1]{% -->
+<!--   \refstepcounter{section}% -->
+<!--   \addcontentsline{toc}{section}{\protect\numberline{\thesection}#1}% -->
+<!--   \sectionmark{#1}} -->
+
+<!-- \newcommand\invisiblessection[1]{% -->
+<!--   \refstepcounter{subsection}% -->
+<!--   \addcontentsline{toc}{subsection}{\protect\numberline{\thesection}#1}% -->
+<!--   \sectionmark{#1}} -->
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(
-	echo = TRUE,
-	message = FALSE,
-	warning = FALSE
-)
+# options(tinytex.verbose = TRUE)
+
+# template com paramentros padrao para as figuras
+knitr::opts_template$set(figuras = list(echo = FALSE, 
+                                        results='hide', 
+                                        fig.show = "hold",
+                                        fig.align = 'center',
+                                        fig.ncol = 1,
+                                        # fig.width = 4,
+                                        # fig.height = 4,
+                                        out.width = "\\textwidth",
+                                        out.height = "0.9\\textheight"
+))
+knitr::opts_template$set(figuras2 = list(echo = FALSE, 
+                                         results='hide', 
+                                         fig.show = "hold",
+                                         fig.align = 'center',
+                                         fig.ncol = 2,
+                                         fig.width = 4,
+                                         out.width = "0.48\\textwidth", 
+                                         out.height = "0.30\\textheight"))
+
+knitr::opts_template$set(
+  series = list(echo = FALSE, 
+                results='hide', 
+                fig.show = "hold",
+                warning=FALSE,
+                fig.align = 'center',
+                fig.ncol = 1,
+                fig.heigth=3, 
+                fig.width=16
+                # out.width = "\\textheight"
+                ))
+
+# uso: <<r, opts.label='figuras'>>=
+# uso: ```{r, opts.label='figuras'}
+
+
 ```
+
 
 # Preparar dados e subconjuntos de treino e teste (omitir essa parte - é só pra obter os dados para os modelos)
 
@@ -264,7 +350,7 @@ tree_func <- function(final_model,
 ```{r}
 # Obs: possibilidades de modelos de AD: rda, lda, pda (acurácias iguais) e qda (pior)
 
-train.control <- caret::trainControl(method = "cv", number = 15) # Cross-validation com k=10
+train.control <- caret::trainControl(method = "cv", number = 15, classProbs =  TRUE) # Cross-validation com k=10
 
 ## ADL com dados imputados
 set.seed(23)
@@ -457,7 +543,7 @@ train.control <- caret::trainControl(method = "cv", number = 10) # Cross-validat
 
 ## Random Forest / dados imputados
 set.seed(23)
-
+tuneGrid <- expand.grid(.mtry = c(1: 10))
 modeloRF1 <- train(diabetes~.,
     train,
     method = "rf",
@@ -474,7 +560,7 @@ plotaroc(rocRF1)
 
 ## Random Forest / sem missing
 set.seed(23)
-
+tuneGrid <- expand.grid(.mtry = c(1: 10))
 modeloRF2 <- train(diabetes~.,
     train_without_NAs,
     method = "rf",
@@ -519,5 +605,122 @@ plotaroc(rocRF2, titulo = "Curva ROC Random Forest (sem Missing)")
 predictRF2 <- predict(modeloRF2, newdata = test_without_NAs)
 print("Sem Missing:")
 confusionMatrix(predictRF2, test_without_NAs$diabetes)
+```
+
+
+# Suporte Vector Machine {.tabset}
+
+## Modelagem
+
+```{r, warning=FALSE}
+
+library(caret)
+## SVM Kernel Linear com dados imputados
+set.seed(23)
+modeloSVM1 <- caret::train(
+  diabetes ~., data = train, method = "svmLinear",
+  trControl = train.control,
+  preProcess = c("center","scale"), 
+  tuneGrid = expand.grid(C = seq(0.01, 10, length = 10))
+)
+print(modeloSVM1)
+plot(modeloSVM1, main="SVM Kernel Linear - Acurácia vs Valores de Cost (Imputados)")
+```
+
+```{r, warning=FALSE}
+rocSVM1 <- roc(response = train$diabetes, predictor = predict(modeloSVM1, train, type = "prob")[,2])
+plotaroc(rocSVM1, "Curva ROC SVM Kernel Linear (Imputados)")
+
+```
+
+```{r, warning=FALSE}
+## SVM Kernel Linear sem missing
+set.seed(23)
+modeloSVM2 <- caret::train(
+  diabetes ~., data = train_without_NAs, method = "svmLinear",
+  trControl = train.control,
+  preProcess = c("center","scale"), 
+  tuneGrid = expand.grid(C = seq(0.01, 10, length = 10))
+)
+print(modeloSVM2)
+plot(modeloSVM2, main="SVM Kernel Linear - Acurácia vs Valores de Cost (Removidos)")
+rocSVM2 <- roc(response = train_without_NAs$diabetes, predictor = predict(modeloSVM2, train_without_NAs, type = "prob")[,2])
+plotaroc(rocSVM2, "Curva ROC SVM Kernel Linear (Removidos)")
+
+
+```
+
+```{r, warning=FALSE}
+
+## SVM Kernel Não Linear com dados imputados
+set.seed(23)
+modeloSVM3 <- caret::train(
+  diabetes ~., data = train, method = "svmRadial",
+  trControl = train.control,
+  preProcess = c("center","scale"), 
+  tuneGrid = expand.grid(sigma = seq(0.01, 1, length = 10) , C = seq(1, 10, length = 10))
+)
+print(modeloSVM3)
+plot(modeloSVM3, main="SVM Kernel não Linear - Acurácia vs Valores de Cost (Imputados)")
+rocSVM3 <- roc(response = train$diabetes, predictor = predict(modeloSVM3, train, type = "prob")[,2])
+plotaroc(rocSVM3, "Curva ROC SVM Kernel não Linear (Imputados)")
+
+```
+
+```{r, warning=FALSE}
+
+## SVM Kernel Não Linear sem missing
+set.seed(23)
+modeloSVM4 <- caret::train(
+  diabetes ~., data = train_without_NAs, method = "svmRadial",
+  trControl = train.control,
+  preProcess = c("center","scale"), 
+  tuneGrid = expand.grid(sigma = seq(0.01, 1, length = 10) , C = seq(1, 10, length = 10))
+)
+print(modeloSVM4)
+plot(modeloSVM4, main="SVM Kernel não Linear - Acurácia vs Valores de Cost (Removidos)")
+rocSVM4 <- roc(response = train_without_NAs$diabetes, predictor = predict(modeloSVM4, train_without_NAs, type = "prob")[,2])
+plotaroc(rocSVM4, "Curva ROC SVM Kernel não Linear (Removidos)")
+
+
+```
+
+
+## Testes
+
+```{r}
+
+## SVM Kernel Linear com dados imputados
+rocSVM1 <- roc(response = test$diabetes, predictor = predict(modeloSVM1, test, type = "prob")[,2])
+plotaroc(rocSVM1, titulo = "Curva ROC SVM Kernel Linear (Imputados)")
+
+predictSVM1 <- predict(modeloSVM1, newdata = test)
+confusionMatrix(predictSVM1, test$diabetes)
+
+
+## SVM Kernel Linear sem missing
+rocSVM2 <- roc(response = test_without_NAs$diabetes, predictor = predict(modeloSVM2, test_without_NAs, type = "prob")[,2])
+plotaroc(rocSVM2, titulo = "Curva ROC SVM Kernel Linear (Removidos)")
+
+predictSVM2 <- predict(modeloSVM2, newdata = test_without_NAs)
+confusionMatrix(predictSVM2, test_without_NAs$diabetes)
+
+
+## SVM Kernel não Linear com dados imputados
+rocSVM3 <- roc(response = test$diabetes, predictor = predict(modeloSVM3, test, type = "prob")[,2])
+plotaroc(rocSVM3, titulo = "Curva ROC SVM Kernel não Linear (Imputados)")
+
+predictSVM3 <- predict(modeloSVM3, newdata = test)
+confusionMatrix(predictSVM3, test$diabetes)
+
+
+## SVM Kernel Linear sem missing
+rocSVM4 <- roc(response = test_without_NAs$diabetes, predictor = predict(modeloSVM4, test_without_NAs, type = "prob")[,2])
+plotaroc(rocSVM4, titulo = "Curva ROC SVM Kernel Linear (Removidos)")
+
+predictSVM4 <- predict(modeloSVM4, newdata = test_without_NAs)
+confusionMatrix(predictSVM4, test_without_NAs$diabetes)
+
+
 ```
 
