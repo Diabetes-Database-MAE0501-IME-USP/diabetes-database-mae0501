@@ -181,8 +181,8 @@ train <- diabetes[index,]			        # 537 test data (70%)
 test <- diabetes[-index,]  		            # 231 test data (30%)
 nrows <- nrow(test)
 index <- sample(1:nrows, 0.7 * nrows)
-test <- test[index,]
 test_out_sample <- test[-index,]
+test <- test[index,]
 
 # Subconjuntos sem missings
 train_without_NAs <- train[complete.cases(train), ]
@@ -710,6 +710,8 @@ plotaroc(rocSVM2, titulo ="Curva ROC SVM Kernel Linear (Removidos)")
 ### SVM Kernel Não Linear com dados imputados
 ```{r, warning=FALSE}
 
+train.control <- caret::trainControl(method = "cv", number = 10, savePred=T, classProb=T)
+
 ## SVM Kernel Não Linear com dados imputados
 set.seed(23)
 modeloSVM3 <- caret::train(
@@ -783,4 +785,32 @@ confusionMatrix(predictSVM4, test_without_NAs$diabetes)
 
 
 ```
+
+# Out-Of-Sample
+
+## AD Quadrática - Dados Removidos
+
+```{r}
+rocAD6out <- roc(response = test_out_sample_whitout_NAs$diabetes, predictor = predict(modeloAD6, test_out_sample_whitout_NAs, type = "prob")[,2])
+plotaroc(rocAD6out, titulo = "Curva ROC AD Quadrática (Removidos)")
+
+predictAD6out <- predict(modeloAD6, newdata = test_out_sample_whitout_NAs)
+confusionMatrix(predictAD6out, test_out_sample_whitout_NAs$diabetes)
+
+
+```
+
+
+## SVM Kernel Não Linear - Dados Imputados
+
+```{r}
+## SVM Kernel não Linear com dados imputados
+rocSVM3 <- roc(response = test_out_sample$diabetes, predictor = predict(modeloSVM3, test_out_sample, type = "prob")[,2])
+plotaroc(rocSVM3, titulo = "Curva ROC SVM Kernel não Linear (Imputados)")
+
+predictSVM3 <- predict(modeloSVM3, newdata = test_out_sample)
+confusionMatrix(predictSVM3, test_out_sample$diabetes)
+
+```
+
 
