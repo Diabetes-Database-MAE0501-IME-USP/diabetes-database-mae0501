@@ -161,7 +161,6 @@ colnames(diabetes)[9] <- "diabetes"
 diabetes$diabetes <- as.factor(diabetes$diabetes)
 levels(diabetes$diabetes) <- c("No","Yes")
 
-# Missings
 diabetes[, 2:6][diabetes[, 2:6] == 0] <- NA
 
 head(diabetes) %>% kable(caption="Dados.")
