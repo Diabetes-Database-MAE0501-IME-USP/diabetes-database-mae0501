@@ -219,7 +219,7 @@ test$SkinThickness <- apply(cbind(imputado_test_1$SkinThickness, imputado_test_2
 test$Insulin <- apply(cbind(imputado_test_1$Insulin, imputado_test_2$Insulin, imputado_test_3$Insulin, imputado_test_4$Insulin, imputado_test_5$Insulin), 1, mean)  
 test$BMI <- apply(cbind(imputado_test_1$BMI, imputado_test_2$BMI, imputado_test_3$BMI, imputado_test_4$BMI, imputado_test_5$BMI), 1, mean)  
 
-imputacao_test_out_sample <- mice(data = test_out_sample , m = 5, maxit = 50, meth = 'pmm', seed = 23) # Imputação no conjunto de teste fora da amostra
+imputacao_test_out_sample <- mice(data = test_out_sample , m = 5, maxit = 50, meth = 'pmm', seed = 23) # Imputação no conjunto de validação
 
 imputado_test_out_sample_1 <- complete(imputacao_test_out_sample, 1)
 imputado_test_out_sample_2 <- complete(imputacao_test_out_sample, 2)
@@ -785,7 +785,7 @@ confusionMatrix(predictSVM4, test_without_NAs$diabetes)
 
 ```
 
-# Out-Of-Sample
+# Validação
 
 ## AD Quadrática - Dados Removidos
 
