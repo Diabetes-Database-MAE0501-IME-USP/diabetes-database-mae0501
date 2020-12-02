@@ -126,8 +126,19 @@ kable <- function(...) {
 
 ```
 
-
 ```{r libs, include=FALSE}
+
+knitr::opts_chunk$set(
+  
+  echo = TRUE, 
+  message = FALSE, 
+  warning = FALSE
+)
+
+```
+
+
+```{r, include=FALSE}
 library(tidyverse)
 library(knitr)
 library(stargazer)
@@ -147,7 +158,7 @@ library(VIM)
 library(caret)
 
 
-
+library(mice)
 ```
 
 
@@ -169,27 +180,27 @@ head(diabetes) %>% kable(caption="Dados.")
 
 ```{r include=FALSE}
 
-# Preparar dados e subconjuntos de treino e teste (omitir essa parte - é só pra obter os dados para os modelos)
+# Preparar dados e subconjuntos de treino e validacaoe (omitir essa parte - é só pra obter os dados para os modelos)
 
-# Suconjuntos de treino, teste e teste fora da amostra
+# Suconjuntos de treino, validacaoe e validacaoe fora da amostra
 set.seed(23) 
 nrows <- nrow(diabetes)
 index <- sample(1:nrows, 0.7 * nrows)	# shuffle and divide
-# train <- diab                         # 768 test data (100%)
-train <- diabetes[index,]			        # 537 test data (70%)
-test <- diabetes[-index,]  		            # 231 test data (30%)
-nrows <- nrow(test)
+# train <- diab                         # 768 validacao data (100%)
+train <- diabetes[index,]			        # 537 validacao data (70%)
+validacao <- diabetes[-index,]  		            # 231 validacao data (30%)
+nrows <- nrow(validacao)
 index <- sample(1:nrows, 0.7 * nrows)
-test_out_sample <- test[-index,]
-test <- test[index,]
+test <- validacao[-index,]
+validacao <- validacao[index,]
 
 # Subconjuntos sem missings
 train_without_NAs <- train[complete.cases(train), ]
-test_without_NAs <- test[complete.cases(test), ]
-test_out_sample_whitout_NAs <- test_out_sample[complete.cases(test_out_sample), ]
+validacao_without_NAs <- validacao[complete.cases(validacao), ]
+test_whitout_NAs <- test[complete.cases(test), ]
 
 # Subconjuntos imputado
-library(mice)
+#library(mice)
 
 imputacao_train <- mice(data = train , m = 5, maxit = 50, meth = 'pmm', seed = 23) # Imputação no conjunto de treino
 
@@ -205,7 +216,21 @@ train$SkinThickness <- apply(cbind(imputado_train_1$SkinThickness, imputado_trai
 train$Insulin <- apply(cbind(imputado_train_1$Insulin, imputado_train_2$Insulin, imputado_train_3$Insulin, imputado_train_4$Insulin, imputado_train_5$Insulin), 1, mean)  
 train$BMI <- apply(cbind(imputado_train_1$BMI, imputado_train_2$BMI, imputado_train_3$BMI, imputado_train_4$BMI, imputado_train_5$BMI), 1, mean)  
 
-imputacao_test <- mice(data = test , m = 5, maxit = 50, meth = 'pmm', seed = 23) # Imputação no conjunto de teste
+imputacao_validacao <- mice(data = validacao , m = 5, maxit = 50, meth = 'pmm', seed = 23) # Imputação no conjunto de validacaoe
+
+imputado_validacao_1 <- complete(imputacao_validacao, 1)
+imputado_validacao_2 <- complete(imputacao_validacao, 2)
+imputado_validacao_3 <- complete(imputacao_validacao, 3)
+imputado_validacao_4 <- complete(imputacao_validacao, 4)
+imputado_validacao_5 <- complete(imputacao_validacao, 5)
+
+validacao$Glucose <- apply(cbind(imputado_validacao_1$Glucose, imputado_validacao_2$Glucose, imputado_validacao_3$Glucose, imputado_validacao_4$Glucose, imputado_validacao_5$Glucose), 1, mean)  
+validacao$BloodPressure <- apply(cbind(imputado_validacao_1$BloodPressure, imputado_validacao_2$BloodPressure, imputado_validacao_3$BloodPressure, imputado_validacao_4$BloodPressure, imputado_validacao_5$BloodPressure), 1, mean)  
+validacao$SkinThickness <- apply(cbind(imputado_validacao_1$SkinThickness, imputado_validacao_2$SkinThickness, imputado_validacao_3$SkinThickness, imputado_validacao_4$SkinThickness, imputado_validacao_5$SkinThickness), 1, mean)  
+validacao$Insulin <- apply(cbind(imputado_validacao_1$Insulin, imputado_validacao_2$Insulin, imputado_validacao_3$Insulin, imputado_validacao_4$Insulin, imputado_validacao_5$Insulin), 1, mean)  
+validacao$BMI <- apply(cbind(imputado_validacao_1$BMI, imputado_validacao_2$BMI, imputado_validacao_3$BMI, imputado_validacao_4$BMI, imputado_validacao_5$BMI), 1, mean)  
+
+imputacao_test <- mice(data = test , m = 5, maxit = 50, meth = 'pmm', seed = 23) # Imputação no conjunto de validação
 
 imputado_test_1 <- complete(imputacao_test, 1)
 imputado_test_2 <- complete(imputacao_test, 2)
@@ -219,29 +244,14 @@ test$SkinThickness <- apply(cbind(imputado_test_1$SkinThickness, imputado_test_2
 test$Insulin <- apply(cbind(imputado_test_1$Insulin, imputado_test_2$Insulin, imputado_test_3$Insulin, imputado_test_4$Insulin, imputado_test_5$Insulin), 1, mean)  
 test$BMI <- apply(cbind(imputado_test_1$BMI, imputado_test_2$BMI, imputado_test_3$BMI, imputado_test_4$BMI, imputado_test_5$BMI), 1, mean)  
 
-imputacao_test_out_sample <- mice(data = test_out_sample , m = 5, maxit = 50, meth = 'pmm', seed = 23) # Imputação no conjunto de validação
-
-imputado_test_out_sample_1 <- complete(imputacao_test_out_sample, 1)
-imputado_test_out_sample_2 <- complete(imputacao_test_out_sample, 2)
-imputado_test_out_sample_3 <- complete(imputacao_test_out_sample, 3)
-imputado_test_out_sample_4 <- complete(imputacao_test_out_sample, 4)
-imputado_test_out_sample_5 <- complete(imputacao_test_out_sample, 5)
-
-test_out_sample$Glucose <- apply(cbind(imputado_test_out_sample_1$Glucose, imputado_test_out_sample_2$Glucose, imputado_test_out_sample_3$Glucose, imputado_test_out_sample_4$Glucose, imputado_test_out_sample_5$Glucose), 1, mean)  
-test_out_sample$BloodPressure <- apply(cbind(imputado_test_out_sample_1$BloodPressure, imputado_test_out_sample_2$BloodPressure, imputado_test_out_sample_3$BloodPressure, imputado_test_out_sample_4$BloodPressure, imputado_test_out_sample_5$BloodPressure), 1, mean)  
-test_out_sample$SkinThickness <- apply(cbind(imputado_test_out_sample_1$SkinThickness, imputado_test_out_sample_2$SkinThickness, imputado_test_out_sample_3$SkinThickness, imputado_test_out_sample_4$SkinThickness, imputado_test_out_sample_5$SkinThickness), 1, mean)  
-test_out_sample$Insulin <- apply(cbind(imputado_test_out_sample_1$Insulin, imputado_test_out_sample_2$Insulin, imputado_test_out_sample_3$Insulin, imputado_test_out_sample_4$Insulin, imputado_test_out_sample_5$Insulin), 1, mean)  
-test_out_sample$BMI <- apply(cbind(imputado_test_out_sample_1$BMI, imputado_test_out_sample_2$BMI, imputado_test_out_sample_3$BMI, imputado_test_out_sample_4$BMI, imputado_test_out_sample_5$BMI), 1, mean)  
-
 
 ```
 
 
 # Análise Descritiva
 
-```{r}
 
-# OBS: análise descritiva com base no conjunto de treinamento para evitar data snooping
+```{r, include= FALSE, warning= FALSE}
 
 library(dplyr)
 library(caret)
@@ -251,6 +261,11 @@ library(GGally)
 library(ggcorrplot)
 library(scales)
 library(pROC)
+```
+
+```{r}
+
+# OBS: análise descritiva com base no conjunto de treinamento para evitar data snooping
 
 # Distribuição da variável resposta
 
@@ -313,11 +328,13 @@ featurePlot(x = train[, 1:8], # Boxplots
 
 **Funções auxiliares**
 
-```{r}
-
+```{r, warning= FALSE, warning=FALSE}
 library(dplyr)
 library(ggraph)
 library(igraph)
+```
+
+```{r}
 
 plotaroc <- function(rocobj, titulo = "Curva ROC"){
   # Função que plota as curvas roc para os modelos ajustados 
@@ -447,56 +464,56 @@ plotaroc(rocAD6, titulo = "Curva ROC AD Quadrática (Removidos)")
 
 
 
-## Testes
+## Validação
 
 ```{r}
 
 ## ADL com dados imputados
-rocAD1 <- roc(response = test$diabetes, predictor = predict(modeloAD1, test, type = "prob")[,2])
+rocAD1 <- roc(response = validacao$diabetes, predictor = predict(modeloAD1, validacao, type = "prob")[,2])
 plotaroc(rocAD1, titulo = "Curva ROC ADL (Imputados)")
 
-predictAD1 <- predict(modeloAD1, newdata = test)
-confusionMatrix(predictAD1, test$diabetes)
+predictAD1 <- predict(modeloAD1, newdata = validacao)
+confusionMatrix(predictAD1, validacao$diabetes)
 
 
 ## ADL sem missing
-rocAD2 <- roc(response = test_without_NAs$diabetes, predictor = predict(modeloAD2, test_without_NAs, type = "prob")[,2])
+rocAD2 <- roc(response = validacao_without_NAs$diabetes, predictor = predict(modeloAD2, validacao_without_NAs, type = "prob")[,2])
 plotaroc(rocAD2, titulo = "Curva ROC ADL (Removidos)")
 
-predictAD2 <- predict(modeloAD2, newdata = test_without_NAs)
-confusionMatrix(predictAD2, test_without_NAs$diabetes)
+predictAD2 <- predict(modeloAD2, newdata = validacao_without_NAs)
+confusionMatrix(predictAD2, validacao_without_NAs$diabetes)
 
 
 ## ADL Flexível com dados imputados
-rocAD3 <- roc(response = test$diabetes, predictor = predict(modeloAD3, test, type = "prob")[,2])
+rocAD3 <- roc(response = validacao$diabetes, predictor = predict(modeloAD3, validacao, type = "prob")[,2])
 plotaroc(rocAD3, titulo = "Curva ROC AD Flexível (Imputados)")
 
-predictAD3 <- predict(modeloAD3, newdata = test)
-confusionMatrix(predictAD3, test$diabetes)
+predictAD3 <- predict(modeloAD3, newdata = validacao)
+confusionMatrix(predictAD3, validacao$diabetes)
 
 
 ## ADL Flexível sem missing
-rocAD4 <- roc(response = test_without_NAs$diabetes, predictor = predict(modeloAD4, test_without_NAs, type = "prob")[,2])
+rocAD4 <- roc(response = validacao_without_NAs$diabetes, predictor = predict(modeloAD4, validacao_without_NAs, type = "prob")[,2])
 plotaroc(rocAD4, titulo = "Curva ROC AD Flexível (Removidos)")
 
-predictAD4 <- predict(modeloAD4, newdata = test_without_NAs)
-confusionMatrix(predictAD4, test_without_NAs$diabetes)
+predictAD4 <- predict(modeloAD4, newdata = validacao_without_NAs)
+confusionMatrix(predictAD4, validacao_without_NAs$diabetes)
 
 
 ## AD Quadrática com dados imputados
-rocAD5 <- roc(response = test$diabetes, predictor = predict(modeloAD5, test, type = "prob")[,2])
+rocAD5 <- roc(response = validacao$diabetes, predictor = predict(modeloAD5, validacao, type = "prob")[,2])
 plotaroc(rocAD5, titulo = "Curva ROC AD Quadrática (Imputados)")
 
-predictAD5 <- predict(modeloAD5, newdata = test)
-confusionMatrix(predictAD5, test$diabetes)
+predictAD5 <- predict(modeloAD5, newdata = validacao)
+confusionMatrix(predictAD5, validacao$diabetes)
 
 
 ## AD Quadrática sem missing
-rocAD6 <- roc(response = test_without_NAs$diabetes, predictor = predict(modeloAD6, test_without_NAs, type = "prob")[,2])
+rocAD6 <- roc(response = validacao_without_NAs$diabetes, predictor = predict(modeloAD6, validacao_without_NAs, type = "prob")[,2])
 plotaroc(rocAD6, titulo = "Curva ROC AD Quadrática (Removidos)")
 
-predictAD6 <- predict(modeloAD6, newdata = test_without_NAs)
-confusionMatrix(predictAD6, test_without_NAs$diabetes)
+predictAD6 <- predict(modeloAD6, newdata = validacao_without_NAs)
+confusionMatrix(predictAD6, validacao_without_NAs$diabetes)
 
 
 ```
@@ -543,40 +560,40 @@ plotaroc(rocRL4)
 ```
 
 
-## Teste
+## Validação
 
 
 ```{r}
 ## Regressão Logística Simples com dados imputados
-rocRL1 <- roc(response = test$diabetes, predictor = predict(modeloRL1, test, type = "prob")[,2])
+rocRL1 <- roc(response = validacao$diabetes, predictor = predict(modeloRL1, validacao, type = "prob")[,2])
 plotaroc(rocRL1, titulo = "Curva ROC RL Simples (Imputados)")
 
-predictRL1 <- predict(modeloRL1, newdata = test)
-confusionMatrix(predictRL1, test$diabetes)
+predictRL1 <- predict(modeloRL1, newdata = validacao)
+confusionMatrix(predictRL1, validacao$diabetes)
 
 
 ## Regressão Logística Simples sem missing
-rocRL2 <- roc(response = test_without_NAs$diabetes, predictor = predict(modeloRL2, test_without_NAs, type = "prob")[,2])
+rocRL2 <- roc(response = validacao_without_NAs$diabetes, predictor = predict(modeloRL2, validacao_without_NAs, type = "prob")[,2])
 plotaroc(rocRL2, titulo = "Curva ROC RL Simples (Removidos)")
 
-predictRL2 <- predict(modeloRL2, newdata = test_without_NAs)
-confusionMatrix(predictRL2, test_without_NAs$diabetes)
+predictRL2 <- predict(modeloRL2, newdata = validacao_without_NAs)
+confusionMatrix(predictRL2, validacao_without_NAs$diabetes)
 
 
 ## Regressão Logística Regularizada com dados imputados
-rocRL3 <- roc(response = test$diabetes, predictor = predict(modeloRL3, test, type = "prob")[,2])
+rocRL3 <- roc(response = validacao$diabetes, predictor = predict(modeloRL3, validacao, type = "prob")[,2])
 plotaroc(rocRL3, titulo = "Curva ROC RL Regularizada (Imputados)")
 
-predictRL3 <- predict(modeloRL3, newdata = test)
-confusionMatrix(predictRL3, test$diabetes)
+predictRL3 <- predict(modeloRL3, newdata = validacao)
+confusionMatrix(predictRL3, validacao$diabetes)
 
 
 ## Regressão Logística Regularizada sem missing
-rocRL4 <- roc(response = test_without_NAs$diabetes, predictor = predict(modeloRL4, test_without_NAs, type = "prob")[,2])
+rocRL4 <- roc(response = validacao_without_NAs$diabetes, predictor = predict(modeloRL4, validacao_without_NAs, type = "prob")[,2])
 plotaroc(rocRL4, titulo = "Curva ROC RL Regularizada (Removidos)")
 
-predictRL4 <- predict(modeloRL4, newdata = test_without_NAs)
-confusionMatrix(predictRL4, test_without_NAs$diabetes)
+predictRL4 <- predict(modeloRL4, newdata = validacao_without_NAs)
+confusionMatrix(predictRL4, validacao_without_NAs$diabetes)
 
 
 ```
@@ -637,24 +654,24 @@ print(paste("Menor árvore sem imputação:",tree_num))
 tree_func(final_model = modeloRF2$finalModel, tree_num[1])
 ```
 
-## Teste
+## Validacão
 ```{r}
 
 ## Random Forest com dados imputados
-rocRF1 <- roc(response = test$diabetes, predictor = predict(modeloRF1, test, type = "prob")[,2])
+rocRF1 <- roc(response = validacao$diabetes, predictor = predict(modeloRF1, validacao, type = "prob")[,2])
 plotaroc(rocRF1, titulo = "Curva ROC Random Forest (Imputados)")
 
-predictRF1 <- predict(modeloRF1, newdata = test)
+predictRF1 <- predict(modeloRF1, newdata = validacao)
 print("Dados imputados:")
-confusionMatrix(predictRF1, test$diabetes)
+confusionMatrix(predictRF1, validacao$diabetes)
 
 ## Random Forest com dados imputados
-rocRF2 <- roc(response = test_without_NAs$diabetes, predictor = predict(modeloRF2, test_without_NAs, type = "prob")[,2])
+rocRF2 <- roc(response = validacao_without_NAs$diabetes, predictor = predict(modeloRF2, validacao_without_NAs, type = "prob")[,2])
 plotaroc(rocRF2, titulo = "Curva ROC Random Forest (sem Missing)")
 
-predictRF2 <- predict(modeloRF2, newdata = test_without_NAs)
+predictRF2 <- predict(modeloRF2, newdata = validacao_without_NAs)
 print("Sem Missing:")
-confusionMatrix(predictRF2, test_without_NAs$diabetes)
+confusionMatrix(predictRF2, validacao_without_NAs$diabetes)
 ```
 
 
@@ -747,54 +764,54 @@ plotaroc(rocSVM4, titulo ="Curva ROC SVM Kernel não Linear (Removidos)")
 ```
 
 
-## Testes
+## Validação
 
 ```{r}
 
 ## SVM Kernel Linear com dados imputados
-rocSVM1 <- roc(response = test$diabetes, predictor = predict(modeloSVM1, test, type = "prob")[,2])
+rocSVM1 <- roc(response = validacao$diabetes, predictor = predict(modeloSVM1, validacao, type = "prob")[,2])
 plotaroc(rocSVM1, titulo = "Curva ROC SVM Kernel Linear (Imputados)")
 
-predictSVM1 <- predict(modeloSVM1, newdata = test)
-confusionMatrix(predictSVM1, test$diabetes)
+predictSVM1 <- predict(modeloSVM1, newdata = validacao)
+confusionMatrix(predictSVM1, validacao$diabetes)
 
 
 ## SVM Kernel Linear sem missing
-rocSVM2 <- roc(response = test_without_NAs$diabetes, predictor = predict(modeloSVM2, test_without_NAs, type = "prob")[,2])
+rocSVM2 <- roc(response = validacao_without_NAs$diabetes, predictor = predict(modeloSVM2, validacao_without_NAs, type = "prob")[,2])
 plotaroc(rocSVM2, titulo = "Curva ROC SVM Kernel Linear (Removidos)")
 
-predictSVM2 <- predict(modeloSVM2, newdata = test_without_NAs)
-confusionMatrix(predictSVM2, test_without_NAs$diabetes)
+predictSVM2 <- predict(modeloSVM2, newdata = validacao_without_NAs)
+confusionMatrix(predictSVM2, validacao_without_NAs$diabetes)
 
 
 ## SVM Kernel não Linear com dados imputados
-rocSVM3 <- roc(response = test$diabetes, predictor = predict(modeloSVM3, test, type = "prob")[,2])
+rocSVM3 <- roc(response = validacao$diabetes, predictor = predict(modeloSVM3, validacao, type = "prob")[,2])
 plotaroc(rocSVM3, titulo = "Curva ROC SVM Kernel não Linear (Imputados)")
 
-predictSVM3 <- predict(modeloSVM3, newdata = test)
-confusionMatrix(predictSVM3, test$diabetes)
+predictSVM3 <- predict(modeloSVM3, newdata = validacao)
+confusionMatrix(predictSVM3, validacao$diabetes)
 
 
 ## SVM Kernel Linear sem missing
-rocSVM4 <- roc(response = test_without_NAs$diabetes, predictor = predict(modeloSVM4, test_without_NAs, type = "prob")[,2])
+rocSVM4 <- roc(response = validacao_without_NAs$diabetes, predictor = predict(modeloSVM4, validacao_without_NAs, type = "prob")[,2])
 plotaroc(rocSVM4, titulo = "Curva ROC SVM Kernel Linear (Removidos)")
 
-predictSVM4 <- predict(modeloSVM4, newdata = test_without_NAs)
-confusionMatrix(predictSVM4, test_without_NAs$diabetes)
+predictSVM4 <- predict(modeloSVM4, newdata = validacao_without_NAs)
+confusionMatrix(predictSVM4, validacao_without_NAs$diabetes)
 
 
 ```
 
-# Validação
+# Teste
 
 ## AD Quadrática - Dados Removidos
 
 ```{r}
-rocAD6out <- roc(response = test_out_sample_whitout_NAs$diabetes, predictor = predict(modeloAD6, test_out_sample_whitout_NAs, type = "prob")[,2])
+rocAD6out <- roc(response = test_whitout_NAs$diabetes, predictor = predict(modeloAD6, test_whitout_NAs, type = "prob")[,2])
 plotaroc(rocAD6out, titulo = "Curva ROC AD Quadrática (Removidos)")
 
-predictAD6out <- predict(modeloAD6, newdata = test_out_sample_whitout_NAs)
-confusionMatrix(predictAD6out, test_out_sample_whitout_NAs$diabetes)
+predictAD6out <- predict(modeloAD6, newdata = test_whitout_NAs)
+confusionMatrix(predictAD6out, test_whitout_NAs$diabetes)
 
 
 ```
@@ -804,11 +821,11 @@ confusionMatrix(predictAD6out, test_out_sample_whitout_NAs$diabetes)
 
 ```{r}
 ## SVM Kernel não Linear com dados imputados
-rocSVM3 <- roc(response = test_out_sample$diabetes, predictor = predict(modeloSVM3, test_out_sample, type = "prob")[,2])
+rocSVM3 <- roc(response = test$diabetes, predictor = predict(modeloSVM3, test, type = "prob")[,2])
 plotaroc(rocSVM3, titulo = "Curva ROC SVM Kernel não Linear (Imputados)")
 
-predictSVM3 <- predict(modeloSVM3, newdata = test_out_sample)
-confusionMatrix(predictSVM3, test_out_sample$diabetes)
+predictSVM3 <- predict(modeloSVM3, newdata = test)
+confusionMatrix(predictSVM3, test$diabetes)
 
 ```
 
