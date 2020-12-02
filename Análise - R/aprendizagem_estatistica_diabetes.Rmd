@@ -178,7 +178,7 @@ head(diabetes) %>% kable(caption="Dados.")
 
 ```
 
-```{r include=FALSE}
+```{r, include=FALSE}
 
 # Preparar dados e subconjuntos de treino e validacaoe (omitir essa parte - é só pra obter os dados para os modelos)
 
