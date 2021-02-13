@@ -1,4 +1,4 @@
-# Pima Indians Diabetes Database
+# Pima Indians Diabetes Databas
 ## Predict the onset of diabetes based on diagnostic measures
 
 O objetivo geral do problema é prever se a pessoa possui ou não diabetes mellitus, com base em uma série de variáveis preditoras. O desafio foi posto declaradamente como um problema de aprendizagem.
